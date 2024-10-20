@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ru.isntrui.lb.states.TaskStatus;
+import ru.isntrui.lb.enums.TaskStatus;
 
 import java.sql.Date;
 

@@ -2,20 +2,21 @@ package ru.isntrui.lb.models;
 
 import jakarta.persistence.*;
 import lombok.*;
-import ru.isntrui.lb.states.Role;
+import ru.isntrui.lb.enums.Role;
 
 import java.sql.Date;
 
 @Entity
-@Data
 @Table(name = "users")
 @EqualsAndHashCode(of = "id")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
+    @Getter(AccessLevel.PUBLIC)
     private String email;
 
     private String password;

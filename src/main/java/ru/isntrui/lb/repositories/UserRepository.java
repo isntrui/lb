@@ -1,14 +1,22 @@
 package ru.isntrui.lb.repositories;
 
-import jakarta.annotation.Nullable;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import ru.isntrui.lb.models.User;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    User findByEmail(String email);
-    User findById(long id);
+import java.util.Optional;
 
-    @Nullable
-    User findByEmailAndPassword(String email, String password);
+public interface UserRepository extends JpaRepository<User, Long> {
+    Optional<User> findByEmail(String email);
+
+    Optional<User> findById(long id);
+
+    Optional<User> findByEmailAndPassword(String email, String password);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE User u SET u.password = :newPassword WHERE u.id = :id")
+    Optional<User> updatePassword(Long id, String newPassword);
 }

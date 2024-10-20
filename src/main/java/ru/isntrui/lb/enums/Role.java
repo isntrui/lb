@@ -1,4 +1,4 @@
-package ru.isntrui.lb.states;
+package ru.isntrui.lb.enums;
 
 public enum Role {
     PERFORMER,

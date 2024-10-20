@@ -4,7 +4,7 @@ package ru.isntrui.lb.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import ru.isntrui.lb.states.WaveStatus;
+import ru.isntrui.lb.enums.WaveStatus;
 
 import java.sql.Date;
 import java.util.Set;
