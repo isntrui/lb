@@ -1,31 +1,25 @@
-package ru.isntrui.lb.models;
+package ru.isntrui.lb.models
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import jakarta.persistence.*
+import lombok.Data
+import lombok.EqualsAndHashCode
 
 @Entity
 @Table(name = "invites")
 @Data
-@EqualsAndHashCode(of = {"id"})
-public class Invite {
-
+@EqualsAndHashCode(of = ["id"])
+open class Invite {
     @Id
     @GeneratedValue
-    private Long id;
+    private val id: Long? = null
 
     @Column(unique = true, nullable = false)
-    private String email;
+    private var email: String? = null
 
-    private String code;
+    private val code: String? = null
 
     @ManyToOne
-    private User madeBy;
+    private val madeBy: User? = null
 
-    private Boolean madeOn;
+    private val madeOn: Boolean? = null
 }

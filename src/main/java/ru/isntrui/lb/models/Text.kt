@@ -1,39 +1,32 @@
-package ru.isntrui.lb.models;
+package ru.isntrui.lb.models
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.sql.Date;
+import jakarta.persistence.*
+import lombok.Data
+import lombok.EqualsAndHashCode
+import java.sql.Date
 
 @Entity
 @Table(name = "texts")
 @Data
-@EqualsAndHashCode(of = {"id"})
-public class Text {
-
+@EqualsAndHashCode(of = ["id"])
+open class Text {
     @Id
     @GeneratedValue
-    private Long id;
+    private val id: Long? = null
 
-    private String wave;
-    private String body;
-    private String title;
-
-    @ManyToOne
-    private User madeBy;
-
-    private Date madeOn;
-
-    private Boolean isApproved;
+    private val wave: String? = null
+    private val body: String? = null
+    private val title: String? = null
 
     @ManyToOne
-    private User approvedBy;
+    private val madeBy: User? = null
 
-    private Date approvedOn;
+    private val madeOn: Date? = null
 
+    private val isApproved: Boolean? = null
+
+    @ManyToOne
+    private val approvedBy: User? = null
+
+    private val approvedOn: Date? = null
 }

@@ -1,6 +1,6 @@
-package ru.isntrui.lb.enums;
+package ru.isntrui.lb.enums
 
-public enum WaveStatus {
+enum class WaveStatus {
     PLANNED,
     STARTED,
     FINISHED

@@ -1,6 +1,6 @@
-package ru.isntrui.lb.enums;
+package ru.isntrui.lb.enums
 
-public enum TaskStatus {
+enum class TaskStatus {
     TODO,
     PROGRESS,
     DONE,
