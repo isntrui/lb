@@ -1,6 +1,6 @@
 package ru.isntrui.lb.enums;
 
-enum TaskStatus {
+public enum TaskStatus {
     TODO,
     PROGRESS,
     DONE,

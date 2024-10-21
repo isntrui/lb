@@ -1,6 +1,6 @@
 package ru.isntrui.lb.enums;
 
-enum UserStatus {
+public enum UserStatus {
     OK,
     NOTFOUND,
     FORBIDDEN,
