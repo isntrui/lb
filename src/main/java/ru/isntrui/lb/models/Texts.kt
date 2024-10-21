@@ -13,18 +13,18 @@ import java.sql.Date
 @Data
 @Entity
 @EqualsAndHashCode(of=["id"])
-class Texts (
+open class Texts (
     @Id
     @GeneratedValue
-    var id: Long,
-    var wave: String,
-    var body: String,
-    var title: String,
-    @ManyToOne var made_by: User,
-    var made_on: Date,
+    private var id: Long,
+    private var wave: String,
+    private var body: String,
+    private var title: String,
+    @ManyToOne private var made_by: User,
+    private var made_on: Date,
 
-    var is_approved: Boolean,
-    @ManyToOne var approved_by: User?,
-    var approved_on: Date?
+    private var is_approved: Boolean,
+    @ManyToOne private var approved_by: User?,
+    private var approved_on: Date?
 
 )

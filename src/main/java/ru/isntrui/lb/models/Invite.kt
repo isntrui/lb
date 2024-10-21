@@ -13,10 +13,10 @@ import lombok.EqualsAndHashCode
 @Table(name = "invites")
 @Data
 @EqualsAndHashCode(of = ["id"])
-class Invite(
-    @Id @GeneratedValue var id: Long = 0,
-    @Column(unique = true, nullable = false) var email: String,
-    var code: String,
-    @ManyToOne var made_by: User,
-    var made_on: Boolean
+open class Invite(
+    @Id @GeneratedValue private var id: Long = 0,
+    @Column(unique = true, nullable = false) private var email: String,
+    private var code: String,
+    @ManyToOne private var made_by: User,
+    private var made_on: Boolean
 )

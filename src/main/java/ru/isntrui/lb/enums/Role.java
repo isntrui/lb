@@ -1,7 +1,9 @@
 package ru.isntrui.lb.enums;
 
 public enum Role {
-    PERFORMER,
+    TECHNICAL,
+    DESIGNER,
+    WRITER,
     COORDINATOR,
     HEAD,
     DIRECTOR

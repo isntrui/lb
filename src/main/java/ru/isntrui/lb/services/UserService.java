@@ -17,13 +17,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createProduct(User user) {
+    public User register(User user) {
         return userRepository.save(user);
     }
 
     public UserStatus changePassword(String email, String oldPassword, String newPassword) {
         Optional<User> userOptional = userRepository.findByEmail(email);
-        if (!userOptional.isPresent()) {
+        if (userOptional.isEmpty()) {
             return UserStatus.NOTFOUND;
         }
         User user = userOptional.get();
@@ -31,7 +31,6 @@ public class UserService {
             return UserStatus.UNAUTHORIZED;
         }
 
-        // Regex to validate the new password
         String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
         if (!newPassword.matches(regex)) {
             return UserStatus.BADREQUEST;
@@ -41,7 +40,27 @@ public class UserService {
         return UserStatus.OK;
     }
 
-    public void changePassword(String email, String newPassword) {
-        // This method is not implemented yet
+    public UserStatus changePassword(String email, String newPassword) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            return UserStatus.NOTFOUND;
+        }
+        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
+        if (!newPassword.matches(regex)) {
+            return UserStatus.BADREQUEST;
+        }
+        userRepository.updatePassword(userOptional.get().getId(), newPassword);
+        return UserStatus.OK;
     }
+
+    public UserStatus remove(String email) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            return UserStatus.NOTFOUND;
+        }
+        userRepository.delete(userOptional.get());
+        return UserStatus.OK;
+    }
+
+
 }
