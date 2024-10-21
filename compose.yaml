@@ -12,7 +12,7 @@ services:
     environment:
       - POSTGRES_USER=${DBUSER}
       - POSTGRES_PASSWORD=${DBPASS}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/${DBNAME}
+      - SPRING_DATASOURCE_URL=${DBNAME}
       - SPRING_DATASOURCE_USERNAME=${DBUSER}
       - SPRING_DATASOURCE_PASSWORD=${DBPASS}
     ports:
