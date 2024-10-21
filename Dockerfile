@@ -19,6 +19,7 @@ WORKDIR /app
 
 # Copy the built JAR file from the builder stage
 COPY --from=builder /app/build/libs/*.jar app.jar
-
+ENV POSTGRES_USER=${DBUSER}
+ENV POSTGRES_PASSWORD=${DBPASS}
 # Command to run the application
 CMD ["java", "-jar", "lb.jar"]
