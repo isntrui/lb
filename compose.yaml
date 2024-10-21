@@ -2,9 +2,9 @@ services:
   postgres:
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=${dbname}'
-      - 'POSTGRES_PASSWORD=${dbpass}'
-      - 'POSTGRES_USER=${dbuser}'
+      - 'POSTGRES_DB=${DBNAME}'
+      - 'POSTGRES_PASSWORD=${DBPASS}'
+      - 'POSTGRES_USER=${DBUSER}'
     ports:
       - '5432:5432'
   app:
