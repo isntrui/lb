@@ -19,7 +19,7 @@ public class OpenApiConfig {
                         .description("""
                                 API for LB Tool app.
                                 
-                                To test it choose some endpoint bellow and click "Try it on" or just use Postman.
+                                To test it select some endpoint bellow and click "Try it out" or just use Postman.
                                 
                                 Made by Artem Akopian
                                 """)
