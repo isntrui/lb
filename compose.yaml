@@ -3,6 +3,10 @@ services:
     image: 'postgres:latest'
     ports:
       - '5432:5432'
+    environment:
+      - POSTGRES_USER=${DBUSER}
+      - POSTGRES_PASSWORD=${DBPASS}
+      - POSTGRES_DB=lbdb
   app:
     build:
       context: .
@@ -10,8 +14,6 @@ services:
     depends_on:
       - postgres
     environment:
-      - POSTGRES_USER=${DBUSER}
-      - POSTGRES_PASSWORD=${DBPASS}
       - SPRING_DATASOURCE_URL=${DBNAME}
       - SPRING_DATASOURCE_USERNAME=${DBUSER}
       - SPRING_DATASOURCE_PASSWORD=${DBPASS}
