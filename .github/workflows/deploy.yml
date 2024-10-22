@@ -16,11 +16,11 @@ jobs:
       - name: Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ env.PRIVATE_KEY }}
+          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Deploy to VPS
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ env.USERNAME }}@${{ env.HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
             cd ~/myapp || exit
             git pull origin main  # Make sure you're on the correct branch
             docker compose down    # Stop the current container
