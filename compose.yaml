@@ -7,7 +7,7 @@ services:
       - POSTGRES_USER=${DBUSER}
       - POSTGRES_PASSWORD=${DBPASS}
       - POSTGRES_DB=lbdb
-    user: postgres
+    user: myuser
   app:
     build:
       context: .
@@ -15,8 +15,8 @@ services:
     depends_on:
       - postgres
     environment:
-      - SPRING_DATASOURCE_URL=${DBNAME}
       - SPRING_DATASOURCE_USERNAME=${DBUSER}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/lbdb
       - SPRING_DATASOURCE_PASSWORD=${DBPASS}
     ports:
       - '80:80'
