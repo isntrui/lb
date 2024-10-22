@@ -7,7 +7,6 @@ services:
       - POSTGRES_USER=${DBUSER}
       - POSTGRES_PASSWORD=${DBPASS}
       - POSTGRES_DB=lbdb
-    user: myuser
   app:
     build:
       context: .
