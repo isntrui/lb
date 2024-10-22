@@ -31,7 +31,7 @@ jobs:
             export DBUSER=${{ secrets.DBUSER }}
             export DBPASS=${{ secrets.DBPASS }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
-            cd ~/myapp || exit
+            cd ~/igw/lb || exit
             git pull origin main  # Make sure you're on the correct branch
             docker compose down    # Stop the current container
             docker compose up -d --build  # Build and start the container in detached mode
