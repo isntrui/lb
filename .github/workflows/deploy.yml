@@ -18,9 +18,19 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
+      - name: Add known hosts
+        run: |
+          mkdir -p -m 0700 ~/.ssh
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            set -e# Exit immediately if a command exits with a non-zero status
+            export DBUSER=${{ secrets.DBUSER }}
+            export DBPASS=${{ secrets.DBPASS }}
+            export DBNAME=jdbc:postgresql://postgres:5432/lbdb
             cd ~/myapp || exit
             git pull origin main  # Make sure you're on the correct branch
             docker compose down    # Stop the current container
