@@ -1,13 +1,13 @@
-version: '3.8'
 services:
   postgres:
     image: 'postgres:latest'
     ports:
       - '5432:5432'
     environment:
-      - POSTGRES_USER=${DBUSER}
-      - POSTGRES_PASSWORD=${DBPASS}
-      - POSTGRES_DB=lbdb
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_PASSWORD: ${DBPASS}
+      POSTGRES_DB: lbdb
+
   app:
     build:
       context: .
@@ -15,12 +15,11 @@ services:
     depends_on:
       - postgres
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # This mounts the Docker socket from the host
+      - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - SPRING_DATASOURCE_USERNAME=${DBUSER}
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/lbdb
-      - SPRING_DATASOURCE_PASSWORD=${DBPASS}
-      - DOCKER_HOST=unix:///var/run/docker.sock
+      SPRING_DATASOURCE_USERNAME: ${DBUSER}
+      SPRING_DATASOURCE_PASSWORD: ${DBPASS}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lbdb
+      DOCKER_HOST: unix:///var/run/docker.sock
     ports:
       - '80:80'
-

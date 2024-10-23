@@ -9,7 +9,7 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Build the project using Gradle
-RUN gradle build --no-daemon --warning-mode all
+RUN ./gradlew build --no-daemon --warning-mode all
 
 # Use a smaller base image for the runtime environment
 FROM openjdk:21-jdk-slim
