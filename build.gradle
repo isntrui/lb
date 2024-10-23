@@ -6,6 +6,7 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id "org.jetbrains.kotlin.plugin.jpa" version "2.1.0-Beta2"
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
+    id 'jacoco'
 }
 
 group = "ru.isntrui"
@@ -66,4 +67,19 @@ tasks.named("test") {
 tasks.named("asciidoctor") {
     inputs.dir snippetsDir
     dependsOn test
+}
+
+jacoco {
+    toolVersion = "0.8.7"
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        html.required = true
+    }
+}
+
+test {
+    finalizedBy jacocoTestReport
 }
