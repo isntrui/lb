@@ -29,10 +29,6 @@ public class User {
     private int graduateYear;
     private String building;
 
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private User createdBy;
-
     private Date registered_on;
 
     @Column(unique = true)

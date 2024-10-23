@@ -9,6 +9,8 @@ import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.UserRepository;
 
+import java.util.EnumSet;
+
 @Service
 public class UserService {
 
@@ -19,8 +21,22 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User register(User user) {
-        return userRepository.save(user);
+    public void register(User user) {
+        validateRole(user.getRole());
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public void changeRole(String email, Role role) {
+        validateRole(role);
+        User user = getUserByEmail(email);
+        userRepository.updateRole(user.getId(), role);
+    }
+
+    private void validateRole(Role role) {
+        if (role == null || !EnumSet.allOf(Role.class).contains(role)) {
+            throw new IllegalArgumentException("Invalid role: " + role);
+        }
     }
 
     @Transactional
@@ -48,11 +64,6 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    @Transactional
-    public void changeRole(String email, Role role) {
-        User user = getUserByEmail(email);
-        userRepository.updateRole(user.getId(), role);
-    }
 
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
