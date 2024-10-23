@@ -65,15 +65,15 @@ public class UserService {
     }
 
 
-    private User getUserByEmail(String email) {
+    public User getUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
     }
 
-    private User getUserById(Long id) {
+    public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    private void validatePassword(User user, String oldPassword) {
+    public void validatePassword(User user, String oldPassword) {
         if (!oldPassword.equals(user.getPassword())) {
             throw new UnauthorizedException();
         }

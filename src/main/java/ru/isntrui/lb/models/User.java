@@ -2,10 +2,14 @@ package ru.isntrui.lb.models;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 import ru.isntrui.lb.enums.Role;
 
 import java.sql.Date;
+import java.time.Year;
+
 
 @Entity
 @Table(name = "users")
@@ -26,6 +30,9 @@ public class User {
     private Role role;
     private String firstName;
     private String lastName;
+
+    @Min(2024)
+    @Max(2028)
     private int graduateYear;
     private String building;
 
