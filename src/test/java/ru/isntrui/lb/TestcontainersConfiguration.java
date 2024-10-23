@@ -11,11 +11,12 @@ public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
-    PostgreSQLContainer<?> postgresContainer() {
+    public PostgreSQLContainer<?> postgresContainer() {
         PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
                 .withDatabaseName("test")
                 .withUsername("test")
-                .withPassword("test");
+                .withPassword("test")
+                .withReuse(true); // Enable reuse of container
         container.start();
         System.out.println("PostgreSQL container started with URL: " + container.getJdbcUrl());
         return container;
