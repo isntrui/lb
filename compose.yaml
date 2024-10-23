@@ -14,8 +14,6 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     environment:
       SPRING_DATASOURCE_USERNAME: ${DBUSER}
       SPRING_DATASOURCE_PASSWORD: ${DBPASS}

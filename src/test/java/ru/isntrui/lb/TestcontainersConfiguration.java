@@ -1,24 +1,19 @@
 package ru.isntrui.lb;
 
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.utility.DockerImageName;
 
-@TestConfiguration(proxyBeanMethods = false)
+@TestConfiguration
 public class TestcontainersConfiguration {
 
     @Bean
-    @ServiceConnection
     public PostgreSQLContainer<?> postgresContainer() {
-        PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
-                .withDatabaseName("test")
-                .withUsername("test")
-                .withPassword("test")
-                .withReuse(true); // Enable reuse of container
+        PostgreSQLContainer<?> container = new PostgreSQLContainer<>("postgres:latest")
+                .withDatabaseName("testdb")
+                .withUsername("testuser")
+                .withPassword("testpass");
         container.start();
-        System.out.println("PostgreSQL container started with URL: " + container.getJdbcUrl());
         return container;
     }
 }
