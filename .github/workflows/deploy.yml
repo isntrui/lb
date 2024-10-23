@@ -27,12 +27,12 @@ jobs:
       - name: Deploy to VPS
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
-            set -e# Exit immediately if a command exits with a non-zero status
+            set -e
             export DBUSER=${{ secrets.DBUSER }}
             export DBPASS=${{ secrets.DBPASS }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
-            cd ~/igw/lb || exit
-            git pull origin main  # Make sure you're on the correct branch
-            docker compose down    # Stop the current container
-            docker compose up -d --build  # Build and start the container in detached mode
+            cd igw/lb
+            git pull
+            docker compose down
+            docker compose up -d --build
           EOF
