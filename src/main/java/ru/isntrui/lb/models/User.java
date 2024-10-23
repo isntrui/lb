@@ -1,5 +1,6 @@
 package ru.isntrui.lb.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 import ru.isntrui.lb.enums.Role;
@@ -33,4 +34,11 @@ public class User {
     private User createdBy;
 
     private Date registered_on;
+
+    @Column(unique = true)
+    @Nullable
+    private String tgUsername;
+
+    @Nullable
+    private String avatarUrl;
 }

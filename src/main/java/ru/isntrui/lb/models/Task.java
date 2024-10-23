@@ -19,10 +19,10 @@ public class Task {
     private String title;
     private String description;
     private Date deadline;
-    private Date created_on;
+    private Date createdOn;
 
     @ManyToOne
-    private User created_by;
+    private User createdBy;
 
     @Enumerated(EnumType.STRING)
     private TaskStatus taskStatus;
@@ -31,10 +31,10 @@ public class Task {
 
     @ManyToOne
     @Nullable
-    private User taken_by;
+    private User takenBy;
     @Nullable
-    private Date taken_on;
+    private Date takenOn;
     @Nullable
-    private Date made_at;
-    private boolean is_completed = false;
+    private Date madeOn;
+    private boolean isCompleted = false;
 }

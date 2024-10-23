@@ -3,6 +3,7 @@ package ru.isntrui.lb.services;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.enums.UserStatus;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.UserRepository;
@@ -62,5 +63,21 @@ public class UserService {
         return UserStatus.OK;
     }
 
+    public UserStatus remove(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()) {
+            return UserStatus.NOTFOUND;
+        }
+        userRepository.delete(userOptional.get());
+        return UserStatus.OK;
+    }
 
+    public UserStatus changeRole(String email, Role role) {
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isEmpty()) {
+            return UserStatus.NOTFOUND;
+        }
+        userRepository.updateRole(userOptional.get().getId(), role);
+        return UserStatus.OK;
+    }
 }
