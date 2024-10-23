@@ -9,7 +9,6 @@ import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByTakenById(Long id);
