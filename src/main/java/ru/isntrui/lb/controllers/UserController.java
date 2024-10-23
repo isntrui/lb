@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
+import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.UserService;
 
@@ -25,7 +26,11 @@ public class UserController {
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
     public ResponseEntity<User> getUserByPathId(@PathVariable Long id) {
-        return ResponseEntity.ok(us.getUserById(id));
+        try {
+            return ResponseEntity.ok(us.getUserById(id));
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Get user by email")

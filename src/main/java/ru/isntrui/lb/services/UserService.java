@@ -21,19 +21,19 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void register(User user) {
+    public void register(User user) throws IllegalArgumentException {
         validateRole(user.getRole());
         userRepository.save(user);
     }
 
     @Transactional
-    public void changeRole(String email, Role role) {
+    public void changeRole(String email, Role role) throws UserNotFoundException{
         validateRole(role);
         User user = getUserByEmail(email);
         userRepository.updateRole(user.getId(), role);
     }
 
-    private void validateRole(Role role) {
+    private void validateRole(Role role) throws IllegalArgumentException {
         if (role == null || !EnumSet.allOf(Role.class).contains(role)) {
             throw new IllegalArgumentException("Invalid role: " + role);
         }
@@ -65,11 +65,11 @@ public class UserService {
     }
 
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(String email) throws UserNotFoundException{
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
     }
 
-    public User getUserById(Long id) {
+    public User getUserById(Long id) throws UserNotFoundException{
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
