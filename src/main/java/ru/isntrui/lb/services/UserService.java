@@ -1,10 +1,11 @@
 package ru.isntrui.lb.services;
 
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.isntrui.lb.enums.Role;
-import ru.isntrui.lb.enums.UserStatus;
+import ru.isntrui.lb.exceptions.UnauthorizedException;
+import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.UserRepository;
 
@@ -22,62 +23,48 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public UserStatus changePassword(String email, String oldPassword, String newPassword) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
-            return UserStatus.NOTFOUND;
-        }
-        User user = userOptional.get();
-        if (!oldPassword.equals(user.getPassword())) {
-            return UserStatus.UNAUTHORIZED;
-        }
-
-        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-        if (!newPassword.matches(regex)) {
-            return UserStatus.BADREQUEST;
-        }
-
+    @Transactional
+    public void changePassword(String email, String oldPassword, String newPassword) {
+        User user = getUserByEmail(email);
+        validatePassword(user, oldPassword);
         userRepository.updatePassword(user.getId(), newPassword);
-        return UserStatus.OK;
     }
 
-    public UserStatus changePassword(String email, String newPassword) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
-            return UserStatus.NOTFOUND;
-        }
-        String regex = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$";
-        if (!newPassword.matches(regex)) {
-            return UserStatus.BADREQUEST;
-        }
-        userRepository.updatePassword(userOptional.get().getId(), newPassword);
-        return UserStatus.OK;
+    @Transactional
+    public void changePassword(String email, String newPassword) {
+        User user = getUserByEmail(email);
+        userRepository.updatePassword(user.getId(), newPassword);
     }
 
-    public UserStatus remove(String email) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
-            return UserStatus.NOTFOUND;
-        }
-        userRepository.delete(userOptional.get());
-        return UserStatus.OK;
+    @Transactional
+    public void remove(String email) {
+        User user = getUserByEmail(email);
+        userRepository.delete(user);
     }
 
-    public UserStatus remove(Long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        if (userOptional.isEmpty()) {
-            return UserStatus.NOTFOUND;
-        }
-        userRepository.delete(userOptional.get());
-        return UserStatus.OK;
+    @Transactional
+    public void remove(Long id) {
+        User user = getUserById(id);
+        userRepository.delete(user);
     }
 
-    public UserStatus changeRole(String email, Role role) {
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        if (userOptional.isEmpty()) {
-            return UserStatus.NOTFOUND;
+    @Transactional
+    public void changeRole(String email, Role role) {
+        User user = getUserByEmail(email);
+        userRepository.updateRole(user.getId(), role);
+    }
+
+    private User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+    }
+
+    private User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    private void validatePassword(User user, String oldPassword) {
+        if (!oldPassword.equals(user.getPassword())) {
+            throw new UnauthorizedException();
         }
-        userRepository.updateRole(userOptional.get().getId(), role);
-        return UserStatus.OK;
     }
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.sql.Date;
-import java.util.Set;
 
 @Entity
 @Data
@@ -23,16 +22,16 @@ public class Song {
     private String url;
 
     @ManyToOne
-    private User made_by;
+    private User madeBy;
 
-    private Date created_on;
+    private Date createdOn;
 
-    private boolean is_approved;
+    private boolean isApproved = false;
 
     @ManyToOne
     private Wave wave;
 
     @ManyToOne
-    private User approved_by;
-    private Date approved_on;
+    private User approvedBy;
+    private Date approvedOn;
 }
