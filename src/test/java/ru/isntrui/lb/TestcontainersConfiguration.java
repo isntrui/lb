@@ -12,9 +12,12 @@ public class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     PostgreSQLContainer<?> postgresContainer() {
-        return new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
+        PostgreSQLContainer<?> container = new PostgreSQLContainer<>(DockerImageName.parse("postgres:latest"))
                 .withDatabaseName("test")
                 .withUsername("test")
                 .withPassword("test");
+        container.start();
+        System.out.println("PostgreSQL container started with URL: " + container.getJdbcUrl());
+        return container;
     }
 }

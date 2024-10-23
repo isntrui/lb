@@ -16,27 +16,10 @@ import java.nio.file.Paths;
 
 @Hidden
 @Controller
-@RequestMapping("/api/")
+@RequestMapping("/api/coverage/")
 public class CoverageController {
 
-    @GetMapping("coverage")
-    public ModelAndView getCoverageReport() {
-        try {
-            Path filePath = Paths.get("build/reports/jacoco/test/html/index.html").toAbsolutePath();
-            Resource resource = new UrlResource(filePath.toUri());
-
-            if (resource.exists() && resource.isReadable()) {
-                ModelAndView modelAndView = new ModelAndView("forward:/build/reports/jacoco/test/html/index.html");
-                return modelAndView;
-            } else {
-                return new ModelAndView("error/404");
-            }
-        } catch (Exception e) {
-            return new ModelAndView("error/500");
-        }
-    }
-
-    @GetMapping("coverage-report")
+    @GetMapping("report")
     public ResponseEntity<Resource> serveCoverageReport() {
         try {
             Path filePath = Paths.get("build/reports/jacoco/test/html/index.html").toAbsolutePath();
@@ -59,6 +42,10 @@ public class CoverageController {
         return getResource("build/reports/jacoco/test/html/jacoco-resources/" + res);
     }
 
+    @GetMapping("{dir}/{res}")
+    public ResponseEntity<Resource> getRep(@PathVariable String dir, @PathVariable String res) {
+        return getResource("build/reports/jacoco/test/html/" + dir + "/" + res);
+    }
 
     private ResponseEntity<Resource> getResource(String resourcePath) {
         try {

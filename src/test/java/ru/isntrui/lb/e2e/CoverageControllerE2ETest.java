@@ -34,14 +34,8 @@ public class CoverageControllerE2ETest {
     @Test
     public void testCoverageReport() throws Exception {
 
-        mockMvc.perform(get("/api/coverage-report")
+        mockMvc.perform(get("/api/coverage/report")
                         .contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    public void testCoverage() throws Exception {
-        mockMvc.perform(get("/api/coverage"))
-                .andExpect(status().is(302));
     }
 }
