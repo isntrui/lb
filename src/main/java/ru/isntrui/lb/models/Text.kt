@@ -35,4 +35,5 @@ open class Text {
 
     @Nullable
     private val approvedOn: Date? = null
+
 }

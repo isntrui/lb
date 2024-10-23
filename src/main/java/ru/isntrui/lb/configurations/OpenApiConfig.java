@@ -15,7 +15,7 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("LB Tool API") // Set your custom title here
-                        .version("0.0.1")
+                        .version("0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1")
                         .description("""
                                 API for LB Tool app.
                                 

@@ -1,5 +1,6 @@
 package ru.isntrui.lb.models
 
+import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import lombok.Data
 import lombok.EqualsAndHashCode
@@ -21,5 +22,13 @@ open class Invite {
     @ManyToOne
     private val madeBy: User? = null
 
+
     private val madeOn: Boolean? = null
+
+    private val isUsed: Boolean = false
+
+
+    @ManyToOne
+    @Nullable
+    private val usedBy: User? = null
 }
