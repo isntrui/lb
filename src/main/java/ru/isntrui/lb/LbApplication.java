@@ -8,8 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.util.Map;
 
 @SpringBootApplication(scanBasePackages = "ru.isntrui.lb")
-@EnableJpaRepositories(basePackages = {"ru.isntrui.lb.repositories"})
-
+@EnableJpaRepositories(basePackages = "ru.isntrui.lb.repositories")
 public class LbApplication {
 
     public static void main(String[] args) {
