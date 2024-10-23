@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -25,8 +26,7 @@ public class CoverageController {
             Resource resource = new UrlResource(filePath.toUri());
 
             if (resource.exists() && resource.isReadable()) {
-                ModelAndView modelAndView = new ModelAndView();
-                modelAndView.setViewName("redirect:/api/coverage-report");
+                ModelAndView modelAndView = new ModelAndView("forward:/build/reports/jacoco/test/html/index.html");
                 return modelAndView;
             } else {
                 return new ModelAndView("error/404");
@@ -47,10 +47,33 @@ public class CoverageController {
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"coverage-report.html\"")
                         .body(resource);
             } else {
-                return ResponseEntity.notFound().build();
+                return ResponseEntity.status(404).body(null);
             }
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
+            return ResponseEntity.status(500).body(null);
+        }
+    }
+
+    @GetMapping("jacoco-resources/{res}")
+    public ResponseEntity<Resource> getRes(@PathVariable String res) {
+        return getResource("build/reports/jacoco/test/html/jacoco-resources/" + res);
+    }
+
+
+    private ResponseEntity<Resource> getResource(String resourcePath) {
+        try {
+            Path filePath = Paths.get(resourcePath).toAbsolutePath();
+            Resource resource = new UrlResource(filePath.toUri());
+
+            if (resource.exists() && resource.isReadable()) {
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath.getFileName().toString() + "\"")
+                        .body(resource);
+            } else {
+                return ResponseEntity.status(404).body(null);
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 }
