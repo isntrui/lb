@@ -40,7 +40,7 @@ services:
     ports:
       - '9090:9090'
     volumes:
-      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml  # Привязываем конфиг Prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Привязываем конфиг Prometheus
       - ./prometheus:/prometheus
     networks:
       - monitoring
