@@ -13,7 +13,7 @@ open class InviteService {
     private lateinit var inviteRepository: InviteRepository
 
     // Find an invite by its code
-    fun findByCode(code: String): Invite? {
+    open fun findByCode(code: String): Invite? {
         return inviteRepository.findByCode(code)
     }
 
