@@ -1,27 +1,28 @@
 package ru.isntrui.lb.models
 
-import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import java.time.LocalDate
 
 @Entity
 @Table(name = "invites")
 open class Invite {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public var id: Long? = null
+    var id: Long? = null
 
     @Column(unique = true, nullable = false)
-    public var email: String? = null
+    var email: String? = null
 
-    public var code: String = ""
+    @Column(nullable = false)
+    var code: String = ""
 
-    // Use LocalDate for better compatibility
-    public var madeOn: LocalDate = LocalDate.now()
+    @Column(name = "made_on", nullable = false)
+    var madeOn: LocalDate = LocalDate.now()
 
-    public var isUsed: Boolean = false
+    @Column(nullable = false)
+    var isUsed: Boolean = false
 
-    @ManyToOne
-    @Nullable
-    public var usedBy: User? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    var usedBy: User? = null
 }
