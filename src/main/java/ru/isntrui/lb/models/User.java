@@ -31,7 +31,7 @@ public class User {
     private String firstName;
     private String lastName;
 
-    @Min(2024)
+    @Min(2022)
     @Max(2028)
     private int graduateYear;
     private String building;

@@ -10,6 +10,7 @@ import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.UserRepository;
 
 import java.util.EnumSet;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -89,6 +90,14 @@ public class UserService {
     public void validatePassword(User user, String oldPassword) {
         if (!oldPassword.equals(user.getPassword())) {
             throw new UnauthorizedException();
+        }
+    }
+
+    public Optional<Boolean> isGraduated(Long user) {
+        try {
+            return Optional.of(getUserById(user).getGraduateYear() < 2022);
+        } catch (UserNotFoundException e) {
+            return Optional.empty();
         }
     }
 }

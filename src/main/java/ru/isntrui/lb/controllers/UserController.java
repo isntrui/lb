@@ -10,6 +10,8 @@ import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
+import java.util.Objects;
+
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
@@ -26,6 +28,9 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         if (us.checkTg(user.getTgUsername())) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (!Objects.equals(Objects.requireNonNull(is.findByCode(inviteCode)).getEmail(), user.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
         us.register(user, inviteCode);

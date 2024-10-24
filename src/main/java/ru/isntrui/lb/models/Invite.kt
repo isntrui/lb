@@ -12,19 +12,19 @@ import lombok.EqualsAndHashCode
 open class Invite {
     @Id
     @GeneratedValue
-    private val id: Long? = null
+    public val id: Long? = null
 
     @Column(unique = true, nullable = false)
-    private var email: String? = null
+    public var email: String? = null
 
-    private val code: String? = null
+    public val code: String? = null
 
-    private val madeOn: Boolean? = null
+    public val madeOn: Boolean? = null
 
-    private val isUsed: Boolean = false
+    public val isUsed: Boolean = false
 
 
     @ManyToOne
     @Nullable
-    private val usedBy: User? = null
+    public val usedBy: User? = null
 }

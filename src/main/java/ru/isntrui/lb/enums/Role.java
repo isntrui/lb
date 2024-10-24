@@ -6,5 +6,6 @@ public enum Role {
     WRITER,
     COORDINATOR,
     HEAD,
-    DIRECTOR
+    DIRECTOR,
+    GRADUATED
 }
