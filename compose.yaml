@@ -77,7 +77,7 @@ services:
       test: [ "CMD", "wget", "-qO-", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
     networks:
       - monitoring
     labels:
