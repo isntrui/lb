@@ -40,12 +40,14 @@ services:
     ports:
       - '9090:9090'
     volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml  # Привязываем конфиг Prometheus
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus:/prometheus
     networks:
       - monitoring
+    user: "root"  # Запуск от имени root, чтобы избежать проблем с правами
     labels:
       - "prometheus-job=prometheus"
+
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
