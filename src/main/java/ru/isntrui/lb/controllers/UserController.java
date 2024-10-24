@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
+import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
 @RestController
@@ -15,17 +16,22 @@ public class UserController {
 
     @Autowired
     UserService us;
+    @Autowired
+    InviteService is;
 
     @Operation(summary = "Create new user")
     @PostMapping("create")
-    public ResponseEntity<Void> createUser(@RequestBody User user) {
+    public ResponseEntity<Void> createUser(@RequestBody User user, @RequestParam String inviteCode) {
+        if (is.findByCode(inviteCode) == null) {
+            return ResponseEntity.badRequest().build();
+        }
         us.register(user);
         return ResponseEntity.ok().build();
     }
 
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserByPathId(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(us.getUserById(id));
         } catch (UserNotFoundException ex) {
@@ -36,14 +42,50 @@ public class UserController {
     @Operation(summary = "Get user by email")
     @GetMapping("get")
     public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
-        return ResponseEntity.ok(us.getUserByEmail(email));
+        try {
+            return ResponseEntity.ok(us.getUserByEmail(email));
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @Operation(summary = "Change user's role")
     @PutMapping("{id}/changeRole")
     public ResponseEntity<Void> changeRoleByEmail(@PathVariable Long id, @RequestParam Role role) {
-        String email = us.getUserById(id).getEmail();
+        String email;
+        try {
+            email = us.getUserById(id).getEmail();
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
         us.changeRole(email, role);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Change user's password")
+    @PutMapping("{id}/changePassword")
+    public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        String email;
+        try {
+            email = us.getUserById(id).getEmail();
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
+        us.changePassword(email, oldPassword, newPassword);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Remove user by id")
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> removeUserById(@PathVariable Long id) {
+        us.remove(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Remove user by email")
+    @DeleteMapping("remove")
+    public ResponseEntity<Void> removeUserByEmail(@RequestParam String email) {
+        us.remove(email);
         return ResponseEntity.ok().build();
     }
 }
