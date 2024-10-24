@@ -35,6 +35,10 @@ public class UserService {
         inviteService.use(invite, userRepository.findByEmail(user.getEmail()).get().getId());
     }
 
+    public boolean checkTg(String tgUsername) {
+        return userRepository.findByTgUsername(tgUsername).isPresent();
+    }
+
     @Transactional
     public void changeRole(String email, Role role) throws UserNotFoundException{
         validateRole(role);
