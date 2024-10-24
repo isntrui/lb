@@ -9,6 +9,46 @@ services:
       POSTGRES_DB: lbdb
     volumes:
       - pg_data:/var/lib/postgresql/data  # Persist data in this volume
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1GB
+    networks:
+      - monitoring
+    labels:
+      - "prometheus-job=postgres"  # Метка для Prometheus мониторинга PostgreSQL
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - monitoring
+    depends_on:
+      - prometheus
+    labels:
+      - "prometheus-job=grafana"
+
+  prometheus:
+    image: prom/prometheus:latest
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./config/prometheus.yml:/etc/prometheus/prometheus.yml  # Привязываем конфиг Prometheus
+      - ./prometheus:/prometheus
+    networks:
+      - monitoring
+    labels:
+      - "prometheus-job=prometheus"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
 
   app:
     build:
@@ -23,6 +63,20 @@ services:
       DOCKER_HOST: unix:///var/run/docker.sock
     ports:
       - '80:80'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 1GB
+    networks:
+      - monitoring
+    labels:
+      - "prometheus-job=spring-boot-app"  # Метка для Prometheus мониторинга приложения
 
 volumes:
   pg_data:
+  grafana_data:  # Создаем том для данных Grafana
+
+networks:
+  monitoring:
+

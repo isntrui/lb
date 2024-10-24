@@ -2,29 +2,26 @@ package ru.isntrui.lb.models
 
 import jakarta.annotation.Nullable
 import jakarta.persistence.*
-import lombok.Data
-import lombok.EqualsAndHashCode
+import java.time.LocalDate
 
 @Entity
 @Table(name = "invites")
-@Data
-@EqualsAndHashCode(of = ["id"])
 open class Invite {
     @Id
-    @GeneratedValue
-    public val id: Long? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public var id: Long? = null
 
     @Column(unique = true, nullable = false)
     public var email: String? = null
 
-    public val code: String? = null
+    public var code: String = ""
 
-    public val madeOn: Boolean? = null
+    // Use LocalDate for better compatibility
+    public var madeOn: LocalDate = LocalDate.now()
 
-    public val isUsed: Boolean = false
-
+    public var isUsed: Boolean = false
 
     @ManyToOne
     @Nullable
-    public val usedBy: User? = null
+    public var usedBy: User? = null
 }
