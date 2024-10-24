@@ -58,8 +58,8 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation('org.springframework.boot:spring-boot-starter-actuator')
-    implementation 'io.micrometer:micrometer-registry-prometheus:1.0.0-rc.1'
     implementation 'com.zaxxer:HikariCP'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
