@@ -25,7 +25,7 @@ public class UserController {
         if (is.findByCode(inviteCode) == null) {
             return ResponseEntity.badRequest().build();
         }
-        us.register(user);
+        us.register(user, inviteCode);
         return ResponseEntity.ok().build();
     }
 

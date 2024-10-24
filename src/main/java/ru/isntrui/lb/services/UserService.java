@@ -15,15 +15,24 @@ import java.util.EnumSet;
 public class UserService {
 
     private final UserRepository userRepository;
+    @Autowired
+    private InviteService inviteService;
 
     @Autowired
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-    public void register(User user) throws IllegalArgumentException {
+    public void register(User user, String invite) throws IllegalArgumentException {
         validateRole(user.getRole());
+        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("User with email " + user.getEmail() + " already exists");
+        }
+        if (user.getGraduateYear() < 2024 || user.getGraduateYear() > 2028) {
+            throw new IllegalArgumentException("Invalid graduate year: " + user.getGraduateYear());
+        }
         userRepository.save(user);
+        inviteService.use(invite, userRepository.findByEmail(user.getEmail()).get().getId());
     }
 
     @Transactional

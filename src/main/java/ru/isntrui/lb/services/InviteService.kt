@@ -10,6 +10,5 @@ class InviteService {
     private lateinit var inviteRepository: InviteRepository
 
     public fun findByCode(code: String) = inviteRepository.findByCode(code)
-    public fun findByMadeById(userId: Long) = inviteRepository.findByMadeById(userId)
     public fun use(code: String, userId: Long) = inviteRepository.setUsed(code, userId)
 }

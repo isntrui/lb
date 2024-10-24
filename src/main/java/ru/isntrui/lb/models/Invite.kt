@@ -19,10 +19,6 @@ open class Invite {
 
     private val code: String? = null
 
-    @ManyToOne
-    private val madeBy: User? = null
-
-
     private val madeOn: Boolean? = null
 
     private val isUsed: Boolean = false

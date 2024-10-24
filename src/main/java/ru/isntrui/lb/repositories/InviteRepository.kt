@@ -11,12 +11,6 @@ import ru.isntrui.lb.models.Invite
 interface InviteRepository : JpaRepository<Invite, Long> {
     public fun findByCode(code: String): Invite?
 
-    public fun findByMadeById(userId: Long): List<Invite>
-
-    @Transactional
-    @Modifying
-    public fun deleteByMadeById(userId: Long)
-
     @Transactional
     @Modifying
     public fun deleteByCode(code: String)
