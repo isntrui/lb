@@ -7,6 +7,8 @@ services:
       POSTGRES_USER: ${DBUSER}
       POSTGRES_PASSWORD: ${DBPASS}
       POSTGRES_DB: lbdb
+    volumes:
+      - pg_data:/var/lib/postgresql/data  # Persist data in this volume
 
   app:
     build:
@@ -21,3 +23,6 @@ services:
       DOCKER_HOST: unix:///var/run/docker.sock
     ports:
       - '80:80'
+
+volumes:
+  pg_data:

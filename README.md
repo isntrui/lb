@@ -68,5 +68,3 @@ We welcome contributions! Feel free to submit pull requests or open issues for d
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 ---
-
-LB Tool is committed to transforming how educational institutions manage tasks, ensuring that deadlines are met efficiently while minimizing manual workload. Join us in making task management seamless!
