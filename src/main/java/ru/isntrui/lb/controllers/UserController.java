@@ -25,9 +25,6 @@ public class UserController {
         if (is.findByCode(inviteCode) == null) {
             return ResponseEntity.badRequest().build();
         }
-        if (us.getUserByEmail(user.getEmail()) != null) {
-            return ResponseEntity.badRequest().build();
-        }
         if (us.checkTg(user.getTgUsername())) {
             return ResponseEntity.badRequest().build();
         }
