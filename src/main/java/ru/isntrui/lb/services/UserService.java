@@ -54,8 +54,8 @@ public class UserService {
     }
 
     @Transactional
-    public void changePassword(String email, String oldPassword, String newPassword) {
-        User user = getUserByEmail(email);
+    public void changePassword(Long id, String oldPassword, String newPassword) throws UnauthorizedException, UserNotFoundException {
+        User user = getUserById(id);
         validatePassword(user, oldPassword);
         userRepository.updatePassword(user.getId(), newPassword);
     }

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
+import ru.isntrui.lb.exceptions.UnauthorizedException;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.InviteService;
@@ -73,13 +74,13 @@ public class UserController {
     @Operation(summary = "Change user's password")
     @PutMapping("{id}/changePassword")
     public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
-        String email;
         try {
-            email = us.getUserById(id).getEmail();
+            us.changePassword(id, oldPassword, newPassword);
+        } catch (UnauthorizedException ex) {
+            return ResponseEntity.status(401).body(null);
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
-        us.changePassword(email, oldPassword, newPassword);
         return ResponseEntity.ok().build();
     }
 
