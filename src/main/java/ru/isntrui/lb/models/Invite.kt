@@ -1,11 +1,12 @@
 package ru.isntrui.lb.models
 
 import jakarta.persistence.*
+import jakarta.validation.constraints.Email
 import java.time.LocalDate
 
 @Entity
 @Table(name = "invites")
-open class Invite {
+open class Invite(emailC: String, codeC: String) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +26,10 @@ open class Invite {
 
     @ManyToOne(fetch = FetchType.LAZY)
     open var usedBy: User? = null
+
+    init {
+        email = emailC
+        code = codeC
+        madeOn = LocalDate.now()
+    }
 }

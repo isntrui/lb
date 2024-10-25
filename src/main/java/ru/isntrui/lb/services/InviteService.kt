@@ -12,6 +12,11 @@ open class InviteService {
     @Autowired
     private lateinit var inviteRepository: InviteRepository
 
+    open fun create(email: String, code: String) : Invite {
+        val invite = Invite(email, code)
+        return inviteRepository.save(invite)
+    }
+
     // Find an invite by its code
     open fun findByCode(code: String): Invite? {
         return inviteRepository.findByCode(code)
