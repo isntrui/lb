@@ -62,7 +62,6 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation 'io.micrometer:micrometer-registry-prometheus'
-    implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation 'com.zaxxer:HikariCP'
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
