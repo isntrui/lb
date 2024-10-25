@@ -17,12 +17,22 @@ services:
     networks:
       - monitoring
     labels:
-      - "prometheus-job=postgres"  # Метка для Prometheus мониторинга PostgreSQL
+      - "prometheus-job=postgres"
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${DBUSER}"]
       interval: 30s
       timeout: 10s
       retries: 5
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+    volumes:
+      - ./local-config.yaml:/etc/loki/local-config.yaml
+      - ./loki_data:/loki
   postgres_exporter:
     image: 'prometheuscommunity/postgres-exporter:latest'
     ports:
@@ -36,7 +46,7 @@ services:
     depends_on:
       - postgres
     labels:
-      - "prometheus-job=postgres-exporter"  # Метка для Prometheus мониторинга экспортера PostgreSQL
+      - "prometheus-job=postgres-exporter"
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -63,7 +73,7 @@ services:
       - ./prometheus:/prometheus
     networks:
       - monitoring
-    user: "root"  # Запуск от имени root, чтобы избежать проблем с правами
+    user: "root"
     labels:
       - "prometheus-job=prometheus"
     command:
@@ -91,11 +101,10 @@ services:
     networks:
       - monitoring
     labels:
-      - "prometheus-job=spring-boot-app"  # Метка для Prometheus мониторинга приложения
-
+      - "prometheus-job=spring-boot-app"
 volumes:
   pg_data:
-  grafana_data:  # Создаем том для данных Grafana
+  grafana_data:
 
 networks:
   monitoring:
