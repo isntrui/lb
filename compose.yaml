@@ -24,7 +24,7 @@ services:
       timeout: 10s
       retries: 5
   postgres_exporter:
-    image: prom/postgres_exporter:latest
+    image: 'prometheuscommunity/postgres-exporter:latest'
     ports:
       - '9187:9187'
     environment:
