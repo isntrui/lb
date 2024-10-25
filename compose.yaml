@@ -24,7 +24,7 @@ services:
       timeout: 10s
       retries: 5
   postgres_exporter:
-    image: prometheuscommunity/postgres_exporter:latest
+    image: prom/postgres_exporter:latest
     ports:
       - '9187:9187'
     environment:
@@ -33,6 +33,8 @@ services:
       DATA_SOURCE_PASS: ${DBPASS}
     networks:
       - monitoring
+    depends_on:
+      - postgres
     labels:
       - "prometheus-job=postgres-exporter"  # Метка для Prometheus мониторинга экспортера PostgreSQL
   grafana:
