@@ -3,6 +3,7 @@ FROM gradle:jdk21 AS builder
 
 # Set the working directory
 WORKDIR /app
+RUN apt-get update && apt-get install -y wget
 
 # Copy the Gradle build files and source code to the container
 COPY build.gradle settings.gradle ./
