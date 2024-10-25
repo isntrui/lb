@@ -56,6 +56,10 @@ dependencies {
     implementation 'io.github.guoshiqiufeng:loki:1.2.1'
     testImplementation 'org.testcontainers:testcontainers:1.19.0'
     testImplementation("org.testcontainers:postgresql")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation('org.springframework.boot:spring-boot-starter-actuator')

@@ -16,13 +16,13 @@ ingester:
 
 schema_config:
   configs:
-    - from: 2023-10-01  # Date from when this config is valid
-      store: boltdb-shipper  # Type of store for logs
-      object_store: filesystem  # Where to store logs (filesystem)
-      schema: v11  # Schema version (use latest)
+    - from: 2023-10-01  # Start date for this schema
+      store: boltdb-shipper
+      object_store: filesystem
+      schema: v11
       index:
-        prefix: index_  # Prefix for index files
-        period: 168h  # How often to rotate index files (1 week)
+        prefix: index_
+        period: 24h  # Use 24h for periodic index config (recommended for boltdb-shipper)
 
 storage_config:
   boltdb_shipper:
@@ -41,5 +41,5 @@ chunk_store_config:
   max_look_back_period: 0s  # No limit on look-back period for queries
 
 table_manager:
-  retention_deletes_enabled: true  # Enable log retention
+  retention_deletes_enabled: true
   retention_period: 168h  # Retain logs for 7 days

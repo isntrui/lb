@@ -12,6 +12,9 @@ import ru.isntrui.lb.models.Invite
 interface InviteRepository : JpaRepository<Invite, Long> {
     public fun findByCode(code: String): Invite?
 
+    @Query("SELECT i FROM Invite i")
+    fun getAllInvites(): List<Invite>;
+
     @Transactional
     @Modifying
     public fun deleteByCode(code: String)

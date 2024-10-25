@@ -9,6 +9,8 @@ import ru.isntrui.lb.models.Invite;
 import ru.isntrui.lb.models.InviteQuery;
 import ru.isntrui.lb.services.InviteService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/invite/")
 public class InviteController {
@@ -22,4 +24,9 @@ public class InviteController {
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
     }
+/*
+    @GetMapping("all")
+    public ResponseEntity<List<Invite>> getAll(@RequestParam JWT)
+
+ */
 }

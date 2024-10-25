@@ -12,6 +12,10 @@ open class InviteService {
     @Autowired
     private lateinit var inviteRepository: InviteRepository
 
+    open fun getAllInvites(): List<Invite> {
+        return inviteRepository.getAllInvites()
+    }
+
     open fun create(email: String, code: String) : Invite {
         val invite = Invite(email, code)
         return inviteRepository.save(invite)
