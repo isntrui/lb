@@ -1,5 +1,6 @@
 package ru.isntrui.lb.controllers;
 
+import cn.hutool.log.dialect.log4j.Log4jLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,8 @@ public class InviteController {
 
     @PostMapping("create")
     public ResponseEntity<Invite> create(@RequestBody InviteQuery query) {
-        if (query.user().getRole().equals(Role.HEAD) || query.user().getRole().equals(Role.COORDINATOR)) {
+        System.out.println(query.user());
+        if (query.user().getRole().toString().equals(Role.HEAD.toString()) || query.user().getRole().equals(Role.COORDINATOR)) {
             inviteService.create(query.email(), query.inviteCode());
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
