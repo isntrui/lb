@@ -41,7 +41,7 @@ public class User implements UserDetails {
     private String building;
 
     private Date registered_on;
-
+    private String tgUsername;
     @Column(unique = true)
     private String username;
 
