@@ -45,10 +45,11 @@ public class SecurityConfiguration {
                 // Настройка доступа к конечным точкам
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
+                        .requestMatchers("/api/**").authenticated()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/swagger-ui/**", "/api/swagger-resources/*", "/api/oas31/**", "/api/").permitAll()
-                        .requestMatchers("/actuator", "/actuator/**").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
