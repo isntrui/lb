@@ -1,6 +1,9 @@
 package ru.isntrui.lb.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.isntrui.lb.enums.Role;
@@ -23,21 +26,31 @@ public class UserService {
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
-    public void register(User user, String invite) throws IllegalArgumentException {
-        validateRole(user.getRole());
-        if (userRepository.findByEmail(user.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("User with email " + user.getEmail() + " already exists");
-        }
-        if (user.getGraduateYear() < 2024 || user.getGraduateYear() > 2028) {
-            throw new IllegalArgumentException("Invalid graduate year: " + user.getGraduateYear());
-        }
-        userRepository.save(user);
-        inviteService.use(invite, userRepository.findByEmail(user.getEmail()).get().getId());
+    /**
+     * Сохранение пользователя
+     *
+     * @return сохраненный пользователь
+     */
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
-    public boolean checkTg(String tgUsername) {
-        return userRepository.findByTgUsername(tgUsername).isPresent();
+    /**
+     * Создание пользователя
+     *
+     * @return созданный пользователь
+     */
+    public User create(User user) {
+        if (userRepository.existsByUsername(user.getUsername())) {
+            // Заменить на свои исключения
+            throw new RuntimeException("Пользователь с таким именем уже существует");
+        }
+
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Пользователь с таким email уже существует");
+        }
+
+        return save(user);
     }
 
     @Transactional
@@ -99,5 +112,43 @@ public class UserService {
         } catch (UserNotFoundException e) {
             return Optional.empty();
         }
+    }
+
+    /**
+     * Получение пользователя по имени пользователя
+     * <p>
+     * Нужен для Spring Security
+     *
+     * @return пользователь
+     */
+    public UserDetailsService userDetailsService() {
+        return this::getByUsername;
+    }
+
+
+    /**
+     * Получение текущего пользователя
+     *
+     * @return текущий пользователь
+     */
+    public User getCurrentUser() {
+        // Получение имени пользователя из контекста Spring Security
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
+
+    /**
+     * Получение пользователя по имени пользователя
+     *
+     * @return пользователь
+     */
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
+
+    }
+
+    public User login(String email, String password) {
+        return null;
     }
 }

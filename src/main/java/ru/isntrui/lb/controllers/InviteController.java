@@ -1,16 +1,13 @@
 package ru.isntrui.lb.controllers;
 
-import cn.hutool.log.dialect.log4j.Log4jLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Invite;
-import ru.isntrui.lb.models.InviteQuery;
+import ru.isntrui.lb.queries.InviteQuery;
 import ru.isntrui.lb.services.InviteService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/invite/")

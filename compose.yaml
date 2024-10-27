@@ -33,6 +33,7 @@ services:
     volumes:
       - ./local-config.yaml:/etc/loki/local-config.yaml
       - ./loki_data:/loki
+    user: "root"
   postgres_exporter:
     image: 'prometheuscommunity/postgres-exporter:latest'
     ports:

@@ -7,5 +7,6 @@ public enum Role {
     COORDINATOR,
     HEAD,
     DIRECTOR,
-    GRADUATED
+    GRADUATED,
+    ADMIN
 }

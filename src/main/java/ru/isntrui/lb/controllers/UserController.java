@@ -28,13 +28,9 @@ public class UserController {
         if (is.findByCode(inviteCode) == null) {
             return ResponseEntity.badRequest().build();
         }
-        if (us.checkTg(user.getTgUsername())) {
-            return ResponseEntity.badRequest().build();
-        }
         if (!Objects.equals(Objects.requireNonNull(is.findByCode(inviteCode)).getEmail(), user.getEmail())) {
             return ResponseEntity.badRequest().build();
         }
-        us.register(user, inviteCode);
         return ResponseEntity.ok().build();
     }
 
@@ -96,5 +92,17 @@ public class UserController {
     public ResponseEntity<Void> removeUserByEmail(@RequestParam String email) {
         us.remove(email);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Login")
+    @PostMapping("login")
+    public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
+        try {
+            return ResponseEntity.ok(us.login(email, password));
+        } catch (UnauthorizedException ex) {
+            return ResponseEntity.status(401).body(null);
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
