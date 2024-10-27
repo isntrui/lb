@@ -30,7 +30,6 @@ jobs:
             set -e
             export DBUSER=${{ secrets.DBUSER }}
             export DBPASS=${{ secrets.DBPASS }}
-            export token.signing.key=${{ secrets.SIGNING_KEY }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
             cd igw/lb
             git pull
