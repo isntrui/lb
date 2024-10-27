@@ -147,8 +147,4 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("Пользователь не найден"));
 
     }
-
-    public User login(String email, String password) {
-        return null;
-    }
 }
