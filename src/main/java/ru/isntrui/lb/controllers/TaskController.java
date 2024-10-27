@@ -13,7 +13,7 @@ import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.services.TaskService;
 import ru.isntrui.lb.services.UserService;
-
+import java.sql.Date;
 import java.util.Optional;
 
 @RestController
@@ -37,6 +37,17 @@ public class TaskController {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
             return ResponseEntity.status(403).build();
         }
+        if (task.getCreatedBy() == null) {
+            task.setCreatedBy(userService.getCurrentUser());
+        }
+        if (task.getCreatedOn() == null) {
+            task.setCreatedOn(new Date(System.currentTimeMillis()));
+        }
+        if (task.getTaskStatus() == null) {
+            task.setTaskStatus(TaskStatus.TODO);
+        }
+
+
         taskService.create(task);
         return ResponseEntity.ok(task);
     }
