@@ -15,6 +15,7 @@ import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Tag(name = "Invite")
 @RestController
@@ -48,6 +49,7 @@ public class InviteController {
     @GetMapping("all")
     public ResponseEntity<List<Invite>> getAll() {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
+            System.out.println(userService.getCurrentUser().getRole().toString() + " - Forbidden");
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
         }
         return ResponseEntity.ok(inviteService.getAllInvites());

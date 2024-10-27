@@ -47,6 +47,7 @@ public class SecurityConfiguration {
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/swagger-ui/**", "/api/swagger-resources/*", "/api/oas31/**", "/api/").permitAll()
+                        .requestMatchers("/actuator", "/actuator/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
