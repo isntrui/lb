@@ -1,6 +1,7 @@
 package ru.isntrui.lb.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,19 +17,19 @@ import ru.isntrui.lb.services.AuthenticationService;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Аутентификация")
+@Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService authenticationService;
 
-    @Operation(summary = "Регистрация пользователя")
+    @Operation(summary = "Register user")
     @PostMapping("/sign-up")
-    public JwtAuthenticationResponse signUp(@RequestBody @Valid SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
         return authenticationService.signUp(request);
     }
 
-    @Operation(summary = "Авторизация пользователя")
+    @Operation(summary = "Auth user")
     @PostMapping("/sign-in")
-    public JwtAuthenticationResponse signIn(@RequestBody @Valid SignInRequest request) {
+    public JwtAuthenticationResponse signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
         return authenticationService.signIn(request);
     }
 }

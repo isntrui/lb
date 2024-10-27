@@ -13,8 +13,8 @@ import java.util.List;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-    List<Task> findByTakenById(Long id);
-    List<Task> findByCreatedById(Long id);
+    List<Task> findAllByTakenById(Long id);
+    List<Task> findAllByCreatedById(Long id);
 
     @Modifying
     @Transactional

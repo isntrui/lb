@@ -1,8 +1,13 @@
 package ru.isntrui.lb.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.UnauthorizedException;
@@ -13,6 +18,7 @@ import ru.isntrui.lb.services.UserService;
 
 import java.util.Objects;
 
+@Tag(name ="User")
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
@@ -24,7 +30,9 @@ public class UserController {
 
     @Operation(summary = "Create new user")
     @PostMapping("create")
-    public ResponseEntity<Void> createUser(@RequestBody User user, @RequestParam String inviteCode) {
+    public ResponseEntity<Void> createUser(
+            @RequestBody @Parameter(description = "New use's object") User user,
+            @RequestParam @Parameter(description = "Invite code, gotten from admin") String inviteCode) {
         if (is.findByCode(inviteCode) == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -36,7 +44,7 @@ public class UserController {
 
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable @Parameter(description = "User's id") Long id) {
         try {
             return ResponseEntity.ok(us.getUserById(id));
         } catch (UserNotFoundException ex) {
@@ -46,7 +54,7 @@ public class UserController {
 
     @Operation(summary = "Get user by email")
     @GetMapping("get")
-    public ResponseEntity<User> getUserByEmail(@RequestParam String email) {
+    public ResponseEntity<User> getUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
         try {
             return ResponseEntity.ok(us.getUserByEmail(email));
         } catch (UserNotFoundException ex) {
@@ -54,9 +62,12 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Change user's role")
+    @Operation(summary = "Change user's role", description = "Available only for admins")
     @PutMapping("{id}/changeRole")
-    public ResponseEntity<Void> changeRoleByEmail(@PathVariable Long id, @RequestParam Role role) {
+    public ResponseEntity<Void> changeRoleByEmail(
+            @PathVariable @Parameter(description = "User's id") Long id,
+            @RequestParam @Parameter(description = "New role") Role role
+    ) {
         String email;
         try {
             email = us.getUserById(id).getEmail();
@@ -69,7 +80,15 @@ public class UserController {
 
     @Operation(summary = "Change user's password")
     @PutMapping("{id}/changePassword")
-    public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "200", description = "Password changed")
+    })
+    public ResponseEntity<Void> changePassword(
+            @PathVariable @Parameter(description = "User's id") Long id,
+            @RequestParam @Parameter(description = "Crypt old password") String oldPassword,
+            @RequestParam @Parameter(description = "Crypt new password") String newPassword) {
         try {
             us.changePassword(id, oldPassword, newPassword);
         } catch (UnauthorizedException ex) {
@@ -80,29 +99,17 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Remove user by id")
+    @Operation(summary = "Remove user by id", description = "Available only for admins")
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> removeUserById(@PathVariable Long id) {
+    public ResponseEntity<Void> removeUserById(@PathVariable @Parameter(description = "User's id") Long id) {
         us.remove(id);
         return ResponseEntity.ok().build();
     }
 
-    @Operation(summary = "Remove user by email")
+    @Operation(summary = "Remove user by email", description = "Available only for admins")
     @DeleteMapping("remove")
-    public ResponseEntity<Void> removeUserByEmail(@RequestParam String email) {
+    public ResponseEntity<Void> removeUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
         us.remove(email);
         return ResponseEntity.ok().build();
-    }
-
-    @Operation(summary = "Login")
-    @PostMapping("login")
-    public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password) {
-        try {
-            return ResponseEntity.ok(us.login(email, password));
-        } catch (UnauthorizedException ex) {
-            return ResponseEntity.status(401).body(null);
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        }
     }
 }

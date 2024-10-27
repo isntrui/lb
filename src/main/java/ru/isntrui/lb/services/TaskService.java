@@ -54,11 +54,11 @@ public class TaskService {
     }
 
     public List<Task> getTasksByUser(User user) {
-        return taskRepository.findByTakenById(user.getId());
+        return taskRepository.findAllByTakenById(user.getId());
     }
 
     public List<Task> getTasksCreatedByUser(User user) {
-        return taskRepository.findByCreatedById(user.getId());
+        return taskRepository.findAllByCreatedById(user.getId());
     }
 
     public List<Task> getAllTasks() {
