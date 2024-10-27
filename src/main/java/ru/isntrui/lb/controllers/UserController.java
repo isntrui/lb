@@ -7,7 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.UnauthorizedException;
@@ -25,22 +25,6 @@ public class UserController {
 
     @Autowired
     UserService us;
-    @Autowired
-    InviteService is;
-
-    @Operation(summary = "Create new user")
-    @PostMapping("create")
-    public ResponseEntity<Void> createUser(
-            @RequestBody @Parameter(description = "New use's object") User user,
-            @RequestParam @Parameter(description = "Invite code, gotten from admin") String inviteCode) {
-        if (is.findByCode(inviteCode) == null) {
-            return ResponseEntity.badRequest().build();
-        }
-        if (!Objects.equals(Objects.requireNonNull(is.findByCode(inviteCode)).getEmail(), user.getEmail())) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok().build();
-    }
 
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
@@ -55,6 +39,9 @@ public class UserController {
     @Operation(summary = "Get user by email")
     @GetMapping("get")
     public ResponseEntity<User> getUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
+        if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
         try {
             return ResponseEntity.ok(us.getUserByEmail(email));
         } catch (UserNotFoundException ex) {
@@ -69,6 +56,18 @@ public class UserController {
             @RequestParam @Parameter(description = "New role") Role role
     ) {
         String email;
+        if (us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
+        if (us.getCurrentUser().getRole() == Role.HEAD && role == Role.ADMIN) {
+            return ResponseEntity.status(403).build();
+        }
+        if (us.getUserById(id) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (us.getUserById(id).getRole() == Role.HEAD && us.getCurrentUser().getRole() != Role.ADMIN) {
+            return ResponseEntity.status(403).build();
+        }
         try {
             email = us.getUserById(id).getEmail();
         } catch (UserNotFoundException ex) {
@@ -86,11 +85,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Password changed")
     })
     public ResponseEntity<Void> changePassword(
-            @PathVariable @Parameter(description = "User's id") Long id,
             @RequestParam @Parameter(description = "Crypt old password") String oldPassword,
             @RequestParam @Parameter(description = "Crypt new password") String newPassword) {
         try {
-            us.changePassword(id, oldPassword, newPassword);
+            us.changePassword(us.getCurrentUser().getId(), oldPassword, newPassword);
         } catch (UnauthorizedException ex) {
             return ResponseEntity.status(401).body(null);
         } catch (UserNotFoundException ex) {
@@ -102,6 +100,15 @@ public class UserController {
     @Operation(summary = "Remove user by id", description = "Available only for admins")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> removeUserById(@PathVariable @Parameter(description = "User's id") Long id) {
+        if (us.getUserById(id) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
+        if (us.getUserById(id).getRole() == Role.HEAD && us.getCurrentUser().getRole() != Role.ADMIN) {
+            return ResponseEntity.status(403).build();
+        }
         us.remove(id);
         return ResponseEntity.ok().build();
     }
@@ -109,6 +116,16 @@ public class UserController {
     @Operation(summary = "Remove user by email", description = "Available only for admins")
     @DeleteMapping("remove")
     public ResponseEntity<Void> removeUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
+        if (us.getUserByEmail(email) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
+        if (us.getUserByEmail(email).getRole() == Role.HEAD && us.getCurrentUser().getRole() != Role.ADMIN) {
+            return ResponseEntity.status(403).build();
+        }
+
         us.remove(email);
         return ResponseEntity.ok().build();
     }

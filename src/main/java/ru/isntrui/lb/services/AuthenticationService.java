@@ -1,12 +1,15 @@
 package ru.isntrui.lb.services;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.isntrui.lb.enums.Role;
+import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
+import ru.isntrui.lb.queries.ChangePasswordRequest;
 import ru.isntrui.lb.queries.JwtAuthenticationResponse;
 import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
@@ -26,7 +29,7 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(@NotNull SignUpRequest request) {
         if (inviteService.findByCode(request.getInviteCode()) == null) {
             throw new RuntimeException("Приглашение не найдено");
         }
@@ -57,7 +60,7 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signIn(SignInRequest request) {
+    public JwtAuthenticationResponse signIn(@NotNull SignInRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
@@ -69,5 +72,14 @@ public class AuthenticationService {
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
+    }
+
+    public void changePassword(@NotNull ChangePasswordRequest cp) throws UserNotFoundException{
+        User user = userService.getUserByEmail(cp.email());
+        if (!passwordEncoder.matches(cp.oldPassword(), user.getPassword())) {
+            throw new RuntimeException("Неверный пароль");
+        }
+        user.setPassword(passwordEncoder.encode(cp.password()));
+        userService.changePassword(user.getEmail(), user.getPassword());
     }
 }
