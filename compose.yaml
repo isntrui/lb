@@ -42,6 +42,7 @@ services:
       DATA_SOURCE_URI: postgres:5432/lbdb?sslmode=disable
       DATA_SOURCE_USER: ${DBUSER}
       DATA_SOURCE_PASS: ${DBPASS}
+
     networks:
       - monitoring
     depends_on:
@@ -92,6 +93,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: ${DBPASS}
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/lbdb
       DOCKER_HOST: unix:///var/run/docker.sock
+      SIGNING_KEY: ${SIGNING_KEY}
     ports:
       - '80:80'
     deploy:
