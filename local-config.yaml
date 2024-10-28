@@ -16,7 +16,6 @@ ingester:
 
 compactor:
 
-
 schema_config:
   configs:
     - from: 2024-10-28
@@ -33,7 +32,7 @@ storage_config:
     cache_location: /loki/boltdb-cache
     shared_store: filesystem
   filesystem:
-    directory: /loki/chunks  # Directory for log chunks
+    directory: /loki/chunks
 
 limits_config:
   enforce_metric_name: false

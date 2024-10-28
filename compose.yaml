@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${DBPASS}
       POSTGRES_DB: lbdb
     volumes:
-      - pg_data:/var/lib/postgresql/data  # Persist data in this volume
+      - pg_data:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
@@ -23,19 +23,20 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+
   loki:
     image: grafana/loki:2.9.0
     ports:
       - "3100:3100"
-    command: -config.file=local-config.yaml
-    networks:
-      - monitoring
+    command: -config.file=/etc/loki/local-config.yaml
     volumes:
       - /loki/index:/loki/index
-      - local-config.yaml
       - /loki/chunks:/loki/chunks
       - /loki/boltdb-cache:/loki/boltdb-cache
-    user: "root"
+      - ./local-config.yaml:/etc/loki/local-config.yaml
+    networks:
+      - monitoring
+
   postgres_exporter:
     image: 'prometheuscommunity/postgres-exporter:latest'
     ports:
@@ -44,13 +45,13 @@ services:
       DATA_SOURCE_URI: postgres:5432/lbdb?sslmode=disable
       DATA_SOURCE_USER: ${DBUSER}
       DATA_SOURCE_PASS: ${DBPASS}
-
     networks:
       - monitoring
     depends_on:
       - postgres
     labels:
       - "prometheus-job=postgres-exporter"
+
   grafana:
     image: grafana/grafana:latest
     ports:
@@ -66,7 +67,6 @@ services:
       - prometheus
     labels:
       - "prometheus-job=grafana"
-    user: "root"
 
   prometheus:
     image: prom/prometheus:latest
@@ -77,7 +77,6 @@ services:
       - ./prometheus:/prometheus
     networks:
       - monitoring
-    user: "root"
     labels:
       - "prometheus-job=prometheus"
     command:
@@ -109,10 +108,10 @@ services:
       - monitoring
     labels:
       - "prometheus-job=spring-boot-app"
+
 volumes:
   pg_data:
   grafana_data:
 
 networks:
   monitoring:
-
