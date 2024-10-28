@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @EqualsAndHashCode
-@Table(name = "design")
+@Table(name = "designs")
 public class Design {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

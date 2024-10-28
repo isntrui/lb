@@ -15,6 +15,7 @@ import java.util.Set;
 @Entity
 @Data
 @EqualsAndHashCode(of="id")
+@Table(name = "waves")
 public class Wave {
     @Id
     @GeneratedValue
