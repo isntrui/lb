@@ -14,7 +14,6 @@ class TextService {
     public fun findByMadeById(id: Long) = textRepository.findByMadeById(id)
     public fun findByApprovedById(id: Long) = textRepository.findByApprovedById(id)
     public fun findByWaveId(id: Long) = textRepository.findByWaveId(id)
-    public fun findByIsApproved(isApproved: Boolean) = textRepository.findByIsApproved(isApproved)
     public fun getAll() = textRepository.findAll()
     public fun getById(id: Long) = textRepository.findById(id)
     public fun create(text: Text) = textRepository.save(text)

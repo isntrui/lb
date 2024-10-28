@@ -12,8 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface WaveRepository extends JpaRepository<Wave, Long> {
-    @Query("SELECT w FROM Wave w ORDER BY w.createdAt DESC")
+    @Query("SELECT w FROM Wave w ORDER BY w.createdAt DESC, w.id DESC")
     Optional<Wave> findLastCreatedWave();
+
 
     @Transactional
     @Modifying

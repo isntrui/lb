@@ -30,10 +30,10 @@ public class CoverageController {
                         .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"coverage-report.html\"")
                         .body(resource);
             } else {
-                return ResponseEntity.status(404).body(null);
+                return ResponseEntity.status(404).build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(null);
+            return ResponseEntity.status(500).build();
         }
     }
 

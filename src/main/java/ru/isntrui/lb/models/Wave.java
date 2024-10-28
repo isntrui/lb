@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ru.isntrui.lb.enums.WaveStatus;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -41,6 +42,9 @@ public class Wave {
     }
 
     public Wave() {
-
+        title = "null";
+        starts_on = Date.valueOf(LocalDate.of(2024, 1, 1));
+        ends_on = Date.valueOf(LocalDate.of(2024, 1, 2));
+        status = WaveStatus.PLANNED;
     }
 }

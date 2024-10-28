@@ -11,7 +11,6 @@ import ru.isntrui.lb.models.Text
 interface TextRepository : JpaRepository<Text, Long> {
     fun findByTitleContaining(title: String): List<Text>
     fun findByMadeById(id: Long): List<Text>
-    fun findByIsApproved(isApproved: Boolean): List<Text>
     fun findByApprovedById(id: Long): List<Text>
     fun findByWaveId(id: Long): List<Text>
 
