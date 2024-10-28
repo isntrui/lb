@@ -13,6 +13,7 @@ import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/text/")
@@ -45,6 +46,7 @@ public class TextController {
     @PutMapping("approve")
     public ResponseEntity<Void> approveText(@RequestParam @Parameter(description = "Text id") Long textId) {
         if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN) {
+            if (ts.getById(textId).isEmpty()) return ResponseEntity.notFound().build();
             try {
                 ts.approve(textId);
             } catch (Exception ex) {
@@ -59,7 +61,11 @@ public class TextController {
     @Operation(summary = "Get all texts made by current user")
     @GetMapping("getAllMy")
     public ResponseEntity<Iterable<Text>> getAllMy() {
-        return ResponseEntity.ok(ts.findByMadeById(us.getCurrentUser().getId()));
+        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.WRITER) {
+
+            return ResponseEntity.ok(ts.findByMadeById(us.getCurrentUser().getId()));
+        }
+        return ResponseEntity.status(403).build();
     }
 
     @Operation(summary = "Get all texts")
@@ -97,10 +103,12 @@ public class TextController {
     @PutMapping("update")
     public ResponseEntity<Void> updateText(@RequestParam @Parameter(description = "Text id") Long id, @RequestParam @Parameter(description = "Title of updated text") String title, @RequestParam @Parameter(description = "Body of updated text") String text) {
         if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || Objects.equals(us.getCurrentUser().getId(), ts.getById(id).get().getId())) {
-            Text t = ts.getById(id).orElseThrow();
-            t.setTitle(title);
-            t.setBody(text);
-            ts.update(id, t);
+            Optional<Text> t = ts.getById(id);
+            if (t.isEmpty()) return ResponseEntity.notFound().build();
+            Text newT = t.get();
+            newT.setTitle(title);
+            newT.setBody(text);
+            ts.update(id, newT);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(403).build();
