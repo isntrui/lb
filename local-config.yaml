@@ -15,6 +15,7 @@ ingester:
   max_transfer_retries: 0
 
 compactor:
+  max_compaction_parallelism: 1
 
 schema_config:
   configs:
