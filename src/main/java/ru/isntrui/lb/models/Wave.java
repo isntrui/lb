@@ -32,4 +32,10 @@ public class Wave {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    public Wave(String title, Date s, Date s1) {
+        this.title = title;
+        this.starts_on = s;
+        this.ends_on = s1;
+    }
 }
