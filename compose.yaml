@@ -27,12 +27,13 @@ services:
     image: grafana/loki:2.9.0
     ports:
       - "3100:3100"
-    command: -config.file=/etc/loki/local-config.yaml
+    command: -config.file=local-config.yaml
     networks:
       - monitoring
     volumes:
-      - ./local-config.yaml:/etc/loki/local-config.yaml
-      - ./loki_data:/loki
+      - /loki/index:/loki/index
+      - /loki/chunks:/loki/chunks
+      - /loki/boltdb-cache:/loki/boltdb-cache
     user: "root"
   postgres_exporter:
     image: 'prometheuscommunity/postgres-exporter:latest'
