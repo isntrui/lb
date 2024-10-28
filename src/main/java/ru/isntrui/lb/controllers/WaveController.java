@@ -61,7 +61,7 @@ public class WaveController {
     public ResponseEntity<Wave> createWave(@RequestBody WaveRequest waveR) {
         Wave wave;
         try {
-            wave = new Wave(waveR.title(), Date.valueOf(waveR.starts_on()), Date.valueOf(waveR.ends_on()));
+            wave = new Wave(waveR.title(), Date.valueOf(waveR.starts_on()), Date.valueOf(waveR.ends_on()), waveR.status());
 
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();

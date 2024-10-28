@@ -1,5 +1,7 @@
 package ru.isntrui.lb.queries;
 
-public record WaveRequest(String title, String starts_on, String ends_on) {
+import ru.isntrui.lb.enums.WaveStatus;
+
+public record WaveRequest(String title, String starts_on, String ends_on, WaveStatus status) {
 
 }

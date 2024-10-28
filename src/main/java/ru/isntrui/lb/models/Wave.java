@@ -33,9 +33,14 @@ public class Wave {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public Wave(String title, Date s, Date s1) {
+    public Wave(String title, Date s, Date s1, WaveStatus status) {
         this.title = title;
+        this.status = status;
         this.starts_on = s;
         this.ends_on = s1;
+    }
+
+    public Wave() {
+
     }
 }
