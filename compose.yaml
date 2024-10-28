@@ -32,6 +32,7 @@ services:
       - monitoring
     volumes:
       - /loki/index:/loki/index
+      - local-config.yaml
       - /loki/chunks:/loki/chunks
       - /loki/boltdb-cache:/loki/boltdb-cache
     user: "root"

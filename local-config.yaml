@@ -46,6 +46,3 @@ chunk_store_config:
 table_manager:
   retention_deletes_enabled: true
   retention_period: 12h
-
-config:
-  file: local-config.yaml
