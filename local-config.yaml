@@ -14,8 +14,8 @@ ingester:
   chunk_retain_period: 30s
   max_transfer_retries: 0
 
-  compactor:
-    enabled: false
+compactor:
+  enabled: false
 
 
 schema_config:
