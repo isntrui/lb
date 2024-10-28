@@ -6,6 +6,7 @@ import ru.isntrui.lb.enums.WaveStatus;
 import ru.isntrui.lb.models.Wave;
 import ru.isntrui.lb.repositories.WaveRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,6 +27,12 @@ public class WaveService {
     }
 
     public Wave createWave(Wave wave) {
+        List<Wave> overlappingWaves = waveRepository.findOverlappingWaves(wave.getStarts_on().toLocalDate(), wave.getEnds_on().toLocalDate());
+
+        if (!overlappingWaves.isEmpty()) {
+            throw new IllegalArgumentException("Невозможно создать волну: период пересекается с уже существующей волной.");
+        }
+
         return waveRepository.save(wave);
     }
 
@@ -36,4 +43,9 @@ public class WaveService {
     public Optional<Wave> getLastCreatedWave() {
         return waveRepository.findLastCreatedWave();
     }
+
+    public List<Wave> getOverlappingWaves(Wave wave) {
+        return waveRepository.findOverlappingWaves(wave.getStarts_on().toLocalDate(), wave.getEnds_on().toLocalDate());
+    }
+
 }

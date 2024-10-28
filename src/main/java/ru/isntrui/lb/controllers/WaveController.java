@@ -58,11 +58,10 @@ public class WaveController {
 
 
     @PostMapping("create")
-    public ResponseEntity<Wave> createWave(@RequestBody WaveRequest waveR) {
+    public ResponseEntity<?> createWave(@RequestBody WaveRequest waveR) {
         Wave wave;
         try {
             wave = new Wave(waveR.title(), Date.valueOf(waveR.starts_on()), Date.valueOf(waveR.ends_on()), waveR.status());
-
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
@@ -70,7 +69,14 @@ public class WaveController {
         if (currentUserRole != Role.COORDINATOR && currentUserRole != Role.HEAD && currentUserRole != Role.ADMIN) {
             return ResponseEntity.status(403).build();
         }
-        Wave createdWave = waveService.createWave(wave);
-        return ResponseEntity.ok(createdWave);
+        try {
+            Wave createdWave = waveService.createWave(wave);
+            return ResponseEntity.ok(createdWave);
+        } catch (IllegalArgumentException e) {
+            List<Wave> w = waveService.getOverlappingWaves(wave);
+            StringBuilder sb = new StringBuilder();
+            w.forEach(s -> sb.append(s.getId()).append("\"").append(s.getTitle()).append("\", "));
+            return ResponseEntity.badRequest().body("Невозможно создать волну: период пересекается с уже существующими волнами: " + sb);
+        }
     }
 }

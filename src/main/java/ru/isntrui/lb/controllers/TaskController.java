@@ -40,9 +40,6 @@ public class TaskController {
         if (task.getCreatedBy() == null) {
             task.setCreatedBy(userService.getCurrentUser());
         }
-        if (task.getCreatedOn() == null) {
-            task.setCreatedOn(new Date(System.currentTimeMillis()));
-        }
         if (task.getTaskStatus() == null) {
             task.setTaskStatus(TaskStatus.TODO);
         }
