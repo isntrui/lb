@@ -23,7 +23,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-    user: root
+    user: "root"
 
   loki:
     image: grafana/loki:2.9.0
@@ -37,7 +37,7 @@ services:
       - ./local-config.yaml:/etc/loki/local-config.yaml
     networks:
       - monitoring
-    user: root
+    user: "root"
 
   postgres_exporter:
     image: 'prometheuscommunity/postgres-exporter:latest'
@@ -53,7 +53,7 @@ services:
       - postgres
     labels:
       - "prometheus-job=postgres-exporter"
-    user: root
+    user: "root"
 
   grafana:
     image: grafana/grafana:latest
@@ -70,7 +70,7 @@ services:
       - prometheus
     labels:
       - "prometheus-job=grafana"
-    user: root
+    user: "root"
 
   prometheus:
     image: prom/prometheus:latest
@@ -86,7 +86,7 @@ services:
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
-    user: root
+    user: "root"
 
   app:
     build:
@@ -113,7 +113,7 @@ services:
       - monitoring
     labels:
       - "prometheus-job=spring-boot-app"
-    user: root
+    user: "root"
 
 volumes:
   pg_data:
