@@ -1,6 +1,5 @@
 package ru.isntrui.lb.models
 
-import jakarta.annotation.Nullable
 import jakarta.persistence.*
 import lombok.Data
 import lombok.EqualsAndHashCode
@@ -12,28 +11,29 @@ import java.sql.Date
 @EqualsAndHashCode(of = ["id"])
 open class Text {
     @Id
-    @GeneratedValue
-    private val id: Long? = null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open var id: Long? = null
+
+    @ManyToOne(optional = false)
+    open lateinit var wave: Wave
+
+    @Column(nullable = false)
+    open lateinit var body: String
+
+    @Column(nullable = false)
+    open lateinit var title: String
+
+    @ManyToOne(optional = false)
+    open lateinit var madeBy: User
+
+    @Column(nullable = false)
+    open lateinit var madeOn: Date
+
+    @Column(nullable = false)
+    open var isApproved: Boolean = false
 
     @ManyToOne
-    private val wave: Wave? = null
+    open var approvedBy: User? = null
 
-    private val body: String? = null
-
-    private val title: String? = null
-
-    @ManyToOne
-    private val madeBy: User? = null
-
-    private val madeOn: Date? = null
-
-    private val isApproved: Boolean = false
-
-    @ManyToOne
-    @Nullable
-    private val approvedBy: User? = null
-
-    @Nullable
-    private val approvedOn: Date? = null
-
+    open var approvedOn: Date? = null
 }

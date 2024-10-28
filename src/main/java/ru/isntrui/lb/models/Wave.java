@@ -4,9 +4,11 @@ package ru.isntrui.lb.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
 import ru.isntrui.lb.enums.WaveStatus;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -26,4 +28,8 @@ public class Wave {
 
     @ManyToMany
     private Set<Song> songs;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
 }

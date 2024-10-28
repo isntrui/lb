@@ -9,14 +9,14 @@ import ru.isntrui.lb.models.Text
 
 @Repository
 interface TextRepository : JpaRepository<Text, Long> {
-    public fun findByTitleContaining(title: String): List<Text>
-    public fun findByMadeById(id: Long): List<Text>
-    public fun findByIsApproved(isApproved: Boolean): List<Text>
-    public fun findByApprovedById(id: Long): List<Text>
-    public fun findByWaveId(id: Long): List<Text>
+    fun findByTitleContaining(title: String): List<Text>
+    fun findByMadeById(id: Long): List<Text>
+    fun findByIsApproved(isApproved: Boolean): List<Text>
+    fun findByApprovedById(id: Long): List<Text>
+    fun findByWaveId(id: Long): List<Text>
 
-    @Transactional
     @Modifying
+    @Transactional
     @Query("UPDATE Text t SET t.isApproved = :isApproved WHERE t.id = :id and t.approvedBy = :userId")
-    public fun approve(id: Long, isApproved: Boolean, userId: Long);
+    fun approve(id: Long, isApproved: Boolean, userId: Long)
 }

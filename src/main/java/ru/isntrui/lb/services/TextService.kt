@@ -22,6 +22,26 @@ class TextService {
     public fun approve(id: Long, userId: Long) {
         textRepository.approve(id, true, userId)
     }
+    public fun update(id: Long, updatedText: Text): Text? {
+        val existingTextOpt = textRepository.findById(id)
+
+        return if (existingTextOpt.isPresent) {
+            val existingText = existingTextOpt.get()
+
+            existingText.title = updatedText.title
+            existingText.body = updatedText.body
+            existingText.isApproved = updatedText.isApproved
+            existingText.approvedBy = updatedText.approvedBy
+            existingText.approvedOn = updatedText.approvedOn
+            existingText.madeBy = updatedText.madeBy
+            existingText.madeOn = updatedText.madeOn
+            existingText.wave = updatedText.wave
+
+            textRepository.save(existingText)
+        } else {
+            null
+        }
+    }
     public fun disapprove(id: Long, userId: Long) {
         textRepository.approve(id, false, userId)
     }

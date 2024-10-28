@@ -32,4 +32,8 @@ public class WaveService {
     public void updateWave(Wave wave) {
         waveRepository.save(wave);
     }
+
+    public Optional<Wave> getLastCreatedWave() {
+        return waveRepository.findLastCreatedWave();
+    }
 }
