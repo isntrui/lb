@@ -2,7 +2,9 @@ package ru.isntrui.lb.models
 
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
+import org.hibernate.annotations.CreationTimestamp
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "invites")
@@ -19,7 +21,8 @@ open class Invite(emailC: String, codeC: String) {
     open var code: String = ""
 
     @Column(name = "made_on", nullable = false)
-    open var madeOn: LocalDate = LocalDate.now()
+    @CreationTimestamp
+    open lateinit var madeOn: LocalDateTime;
 
     @Column(nullable = false)
     open var isUsed: Boolean = false
@@ -30,6 +33,5 @@ open class Invite(emailC: String, codeC: String) {
     init {
         email = emailC
         code = codeC
-        madeOn = LocalDate.now()
     }
 }

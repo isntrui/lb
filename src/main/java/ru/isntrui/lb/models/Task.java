@@ -5,9 +5,11 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
 import ru.isntrui.lb.enums.TaskStatus;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -29,7 +31,8 @@ public class Task {
     private Date deadline;
 
     @Schema(description = "Task's created date", example = "2021-12-31")
-    private Date createdOn;
+    @CreationTimestamp
+    private LocalDateTime createdOn;
 
     @ManyToOne
     @Schema(description = "Task's creator")

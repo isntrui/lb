@@ -5,12 +5,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.isntrui.lb.enums.Role;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -40,7 +42,8 @@ public class User implements UserDetails {
     private int graduateYear;
     private String building;
 
-    private Date registered_on;
+    @CreationTimestamp
+    private LocalDateTime registered_on;
     private String tgUsername;
     @Column(unique = true)
     private String username;
@@ -119,11 +122,6 @@ public class User implements UserDetails {
 
         public UserBuilder building(String buildingB) {
             user.setBuilding(buildingB);
-            return this;
-        }
-
-        public UserBuilder registered_on(Date registered_onB) {
-            user.setRegistered_on(registered_onB);
             return this;
         }
 

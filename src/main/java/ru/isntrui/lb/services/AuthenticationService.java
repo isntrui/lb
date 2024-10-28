@@ -46,7 +46,6 @@ public class AuthenticationService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .graduateYear(request.getYear())
-                .registered_on(new java.sql.Date(System.currentTimeMillis()))
                 .build();
         userService.create(user);
         inviteService.use(request.getInviteCode(), user.getId());

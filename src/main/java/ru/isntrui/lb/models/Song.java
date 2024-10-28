@@ -3,8 +3,10 @@ package ru.isntrui.lb.models;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -24,7 +26,8 @@ public class Song {
     @ManyToOne
     private User madeBy;
 
-    private Date createdOn;
+    @CreationTimestamp
+    private LocalDateTime createdOn;
 
     private boolean isApproved = false;
 

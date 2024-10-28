@@ -32,7 +32,6 @@ public class TextController {
         Text t = new Text();
         t.setMadeBy(us.getCurrentUser());
         t.setApproved(false);
-        t.setMadeOn(new Date(System.currentTimeMillis()));
         t.setBody(text);
         t.setTitle(title);
         t.setWave(ws.getLastCreatedWave().orElse(null));

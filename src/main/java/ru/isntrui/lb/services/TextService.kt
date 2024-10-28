@@ -33,7 +33,6 @@ class TextService {
             existingText.approvedBy = updatedText.approvedBy
             existingText.approvedOn = updatedText.approvedOn
             existingText.madeBy = updatedText.madeBy
-            existingText.madeOn = updatedText.madeOn
             existingText.wave = updatedText.wave
 
             textRepository.save(existingText)

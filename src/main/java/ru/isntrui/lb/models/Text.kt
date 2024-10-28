@@ -3,7 +3,9 @@ package ru.isntrui.lb.models
 import jakarta.persistence.*
 import lombok.Data
 import lombok.EqualsAndHashCode
+import org.hibernate.annotations.CreationTimestamp
 import java.sql.Date
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "texts")
@@ -27,7 +29,9 @@ open class Text {
     open lateinit var madeBy: User
 
     @Column(nullable = false)
-    open lateinit var madeOn: Date
+
+    @CreationTimestamp
+    open lateinit var madeOn: LocalDateTime
 
     @Column(nullable = false)
     open var isApproved: Boolean = false
