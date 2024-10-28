@@ -37,3 +37,4 @@ out/
 .vscode/
 
 .env
+/.kotlin/errors/errors-1729932433000.log
