@@ -15,7 +15,7 @@ open class Text {
     open var id: Long? = null
 
     @ManyToOne(optional = false)
-    open lateinit var wave: Wave
+    open var wave: Wave? = null
 
     @Column(nullable = false)
     open lateinit var body: String

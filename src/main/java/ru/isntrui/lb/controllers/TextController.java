@@ -35,7 +35,7 @@ public class TextController {
         t.setMadeOn(new Date(System.currentTimeMillis()));
         t.setBody(text);
         t.setTitle(title);
-        t.setWave(ws.getLastCreatedWave().orElseThrow());
+        t.setWave(ws.getLastCreatedWave().orElse(null));
         if (us.getCurrentUser().getRole() == Role.WRITER || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR) {
             ts.create(t);
             return ResponseEntity.ok().build();
