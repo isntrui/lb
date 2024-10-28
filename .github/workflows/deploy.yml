@@ -34,8 +34,6 @@ jobs:
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
             cd igw/lb
             git pull
-            docker system prune
-            yes
-            docker compose down
+            docker system prune -f
             docker compose up -d --build
           EOF
