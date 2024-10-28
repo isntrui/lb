@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service
 import ru.isntrui.lb.models.Text
 import ru.isntrui.lb.models.User
 import ru.isntrui.lb.repositories.TextRepository
+import java.time.LocalDateTime
 import kotlin.jvm.Throws
 
 @Service
@@ -24,9 +25,7 @@ class TextService {
 
     @Throws(Exception::class)
     public fun approve(id: Long) {
-        val t: Text = getById(id).get();
-
-        textRepository.approve(id, true, userService.currentUser)
+        textRepository.approve(id, true, userService.currentUser, LocalDateTime.now())
     }
     public fun update(id: Long, updatedText: Text): Text? {
         val existingTextOpt = textRepository.findById(id)
@@ -48,6 +47,6 @@ class TextService {
         }
     }
     public fun disapprove(id: Long) {
-        textRepository.approve(id, false, userService.currentUser)
+        textRepository.approve(id, false, userService.currentUser, LocalDateTime.now())
     }
 }

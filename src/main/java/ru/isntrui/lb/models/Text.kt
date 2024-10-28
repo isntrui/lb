@@ -39,5 +39,5 @@ open class Text {
     @ManyToOne
     open var approvedBy: User? = null
 
-    open var approvedOn: Date? = null
+    open var approvedOn: LocalDateTime? = null
 }

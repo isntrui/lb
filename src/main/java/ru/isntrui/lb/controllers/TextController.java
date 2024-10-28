@@ -12,7 +12,6 @@ import ru.isntrui.lb.services.TextService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
-import java.sql.Date;
 import java.util.Objects;
 
 @RestController

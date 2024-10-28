@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import ru.isntrui.lb.models.Text
 import ru.isntrui.lb.models.User
+import java.time.LocalDateTime
 
 @Repository
 interface TextRepository : JpaRepository<Text, Long> {
@@ -17,6 +18,6 @@ interface TextRepository : JpaRepository<Text, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Text t SET t.isApproved = :isApproved WHERE t.id = :id and t.approvedBy = :user")
-    fun approve(id: Long, isApproved: Boolean, user: User)
+    @Query("UPDATE Text t SET t.isApproved = :isApproved, t.approvedBy = :user, t.approvedOn= :ldt WHERE t.id = :id")
+    fun approve(id: Long, isApproved: Boolean, user: User, ldt: LocalDateTime)
 }
