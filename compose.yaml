@@ -34,7 +34,7 @@ services:
       - /loki/index:/loki/index
       - /loki/chunks:/loki/chunks
       - /loki/boltdb-cache:/loki/boltdb-cache
-      - ./local-config.yaml:/etc/loki/local-config.yaml
+      - ./local-config.yaml:/local-config.yaml
     networks:
       - monitoring
     user: "root"
