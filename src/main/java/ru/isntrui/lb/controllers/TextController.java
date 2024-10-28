@@ -46,7 +46,12 @@ public class TextController {
     @PutMapping("approve")
     public ResponseEntity<Void> approveText(@RequestParam @Parameter(description = "Text id") Long textId) {
         if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN) {
-            ts.approve(textId, us.getCurrentUser().getId());
+            try {
+                ts.approve(textId);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(403).build();

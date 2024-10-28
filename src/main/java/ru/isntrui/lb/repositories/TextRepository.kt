@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import ru.isntrui.lb.models.Text
+import ru.isntrui.lb.models.User
 
 @Repository
 interface TextRepository : JpaRepository<Text, Long> {
@@ -16,6 +17,6 @@ interface TextRepository : JpaRepository<Text, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Text t SET t.isApproved = :isApproved WHERE t.id = :id and t.approvedBy = :userId")
-    fun approve(id: Long, isApproved: Boolean, userId: Long)
+    @Query("UPDATE Text t SET t.isApproved = :isApproved WHERE t.id = :id and t.approvedBy = :user")
+    fun approve(id: Long, isApproved: Boolean, user: User)
 }
