@@ -35,7 +35,7 @@ public class TextController {
             t.setApproved(false);
             t.setBody(text);
             t.setTitle(title);
-            t.setWave(ws.getLastCreatedWave().orElse(null));
+            t.setWave(ws.getLastCreatedWave().getFirst());
             ts.create(t);
             return ResponseEntity.ok().build();
         }

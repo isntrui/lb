@@ -30,7 +30,7 @@ public class SongController {
     @PostMapping("create")
     public ResponseEntity<Void> create(@RequestBody @Parameter(description = "New song") Song song) {
         song.setMadeBy(us.getCurrentUser());
-        song.setWave(ws.getLastCreatedWave().orElse(null));
+        song.setWave(ws.getLastCreatedWave().getFirst());
         songService.createSong(song);
         return ResponseEntity.ok().build();
     }

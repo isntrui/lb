@@ -10,13 +10,13 @@ import ru.isntrui.lb.enums.WaveStatus;
 import ru.isntrui.lb.models.Wave;
 
 import java.time.LocalDate;
+import org.springframework.data.domain.Pageable;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface WaveRepository extends JpaRepository<Wave, Long> {
     @Query("SELECT w FROM Wave w ORDER BY w.id DESC")
-    Optional<Wave> findLastCreatedWave();
+    List<Wave> findAllWaves(Pageable pageable);
 
     @Query("SELECT w FROM Wave w WHERE (w.starts_on <= :endsOn AND w.ends_on >= :startsOn)")
     List<Wave> findOverlappingWaves(@Param("startsOn") LocalDate startsOn, @Param("endsOn") LocalDate endsOn);
@@ -25,5 +25,4 @@ public interface WaveRepository extends JpaRepository<Wave, Long> {
     @Modifying
     @Query("UPDATE Wave w SET w.status = :status WHERE w.id = :id")
     void updateStatus(Long id, WaveStatus status);
-
 }

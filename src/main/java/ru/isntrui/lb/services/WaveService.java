@@ -1,6 +1,8 @@
 package ru.isntrui.lb.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.isntrui.lb.enums.WaveStatus;
 import ru.isntrui.lb.models.Wave;
@@ -40,12 +42,12 @@ public class WaveService {
         waveRepository.save(wave);
     }
 
-    public Optional<Wave> getLastCreatedWave() {
-        return waveRepository.findLastCreatedWave();
+    public List<Wave> getLastCreatedWave() {
+        Pageable pb = PageRequest.of(0, 1);
+        return waveRepository.findAllWaves(pb);
     }
 
     public List<Wave> getOverlappingWaves(Wave wave) {
         return waveRepository.findOverlappingWaves(wave.getStarts_on().toLocalDate(), wave.getEnds_on().toLocalDate());
     }
-
 }
