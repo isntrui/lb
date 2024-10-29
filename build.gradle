@@ -8,8 +8,17 @@ plugins {
     id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
     id 'jacoco'
     id 'maven-publish'
-
+    id "org.sonarqube" version "3.5.0.2730"
 }
+
+jacoco {
+    toolVersion = "0.8.8"
+}
+
+test {
+    finalizedBy jacocoTestReport
+}
+
 
 group = "ru.isntrui"
 version = "0.0.1-SNAPSHOT"
