@@ -57,8 +57,8 @@ jobs:
         with:
           projectBaseDir: '.'
           args: >
-            -Dsonar.projectKey=<your_project_key>
-            -Dsonar.organization=<your_organization_key>
+            -Dsonar.projectKey=lb
+            -Dsonar.organization=isntrui
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
