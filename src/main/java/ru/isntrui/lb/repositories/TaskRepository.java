@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
+import ru.isntrui.lb.models.User;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Transactional
     @Query("UPDATE Task t SET t.taskStatus = ?2 WHERE t.id = ?1")
     int updateTaskStatus(Long taskId, TaskStatus taskStatus);
+
+    List<Task> findTasksByTakenBy(User user);
 }

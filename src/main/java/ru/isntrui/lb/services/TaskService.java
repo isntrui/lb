@@ -10,7 +10,6 @@ import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.TaskRepository;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,6 +56,10 @@ public class TaskService {
         return taskRepository.findAllByTakenById(user.getId());
     }
 
+    public List<Task> getTasksTakenBy(User user) {
+        return taskRepository.findTasksByTakenBy(user);
+    }
+
     public List<Task> getTasksCreatedByUser(User user) {
         return taskRepository.findAllByCreatedById(user.getId());
     }
@@ -65,14 +68,6 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    @Transactional
-    public void completeTask(Long taskId, boolean isCompleted) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
-        task.setCompleted(isCompleted);
-        task.setTaskStatus(isCompleted ? TaskStatus.DONE : TaskStatus.PROGRESS);
-        if (!isCompleted) task.setMadeOn(new Date(System.currentTimeMillis()));
-        taskRepository.save(task);
-    }
 
     @Transactional
     public void updateTask(Task task) {

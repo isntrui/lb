@@ -21,10 +21,14 @@ import java.util.Optional;
 @Tag(name = "Task")
 @RequestMapping("/api/task/")
 public class TaskController {
+    private final TaskService taskService;
+    private final UserService userService;
+
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private UserService userService;
+    public TaskController(TaskService taskService, UserService userService) {
+        this.taskService = taskService;
+        this.userService = userService;
+    }
 
     @Operation(summary = "Create new task")
     @ApiResponses(value = {
@@ -76,11 +80,92 @@ public class TaskController {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN) || userService.getCurrentUser().getId().equals(Objects.requireNonNull(t.get().getTakenBy()).getId()))) {
             return ResponseEntity.status(403).build();
         }
-
         Task task = t.get();
         task.setTaskStatus(status);
         taskService.updateTask(task);
         return ResponseEntity.ok(task);
+    }
+
+    @Operation(summary = "Set completeness of task")
+    @PutMapping("{id}/complete")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task completed"),
+            @ApiResponse(responseCode = "404", description = "Task not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden: user is not allowed to complete that task")
+    })
+    public ResponseEntity<Task> completeTask(
+            @PathVariable @Parameter(description = "Task' id", example = "2") Long id,
+            @RequestParam @Parameter(description = "Is task completed", example = "true") boolean isCompleted) {
+        Optional<Task> t = taskService.getTaskById(id);
+        if (t.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN) || userService.getCurrentUser().getId().equals(Objects.requireNonNull(t.get().getTakenBy()).getId()))) {
+            return ResponseEntity.status(403).build();
+        }
+
+        Task task = t.get();
+        task.setCompleted(isCompleted);
+        task.setTaskStatus(isCompleted ? TaskStatus.DONE : TaskStatus.PROGRESS);
+        task.setMadeOn(isCompleted ? null : new java.sql.Date(System.currentTimeMillis()));
+        taskService.updateTask(task);
+        return ResponseEntity.ok(task);
+    }
+
+    @Operation(summary = "Take task")
+    @PutMapping("{id}/take")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Task taken"),
+            @ApiResponse(responseCode = "404", description = "Task not found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden: user is not allowed to take that task")
+    })
+    public ResponseEntity<Task> takeTask(
+            @PathVariable @Parameter(description = "Task' id", example = "2") Long id
+    ) {
+        Optional<Task> t = taskService.getTaskById(id);
+        if (t.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Task task = t.get();
+        if (task.getTakenBy() != null) {
+            return ResponseEntity.status(403).build();
+        }
+        task.setTakenBy(userService.getCurrentUser());
+        taskService.updateTask(task);
+        return ResponseEntity.ok(task);
+    }
+
+    @Operation(summary = "Get tasks created by user")
+    @GetMapping("createdBy")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tasks found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden: user is not allowed to get tasks created by that user"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<Iterable<Task>> getTasksCreatedByUser(
+            @RequestParam @Parameter(description = "User' id", example = "2") Long id
+    ) {
+        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
+            return ResponseEntity.status(403).build();
+        }
+        if (userService.getUserById(id) == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(taskService.getTasksCreatedByUser(userService.getUserById(id)));
+    }
+
+    @Operation(summary = "Get tasks taken by user")
+    @GetMapping("takenBy")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Tasks found"),
+            @ApiResponse(responseCode = "403", description = "Forbidden: user is not allowed to get tasks taken by that user"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<Iterable<Task>> getTasksTakenByUser(
+            @RequestParam @Parameter(description = "User' id", example = "2") Long id
+    ) {
+        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(taskService.getTasksTakenBy(userService.getUserById(id)));
     }
 
     @Operation(summary = "Update task")
