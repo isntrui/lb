@@ -42,8 +42,8 @@ jobs:
       REGISTRY: ghcr.io
       IMAGE_NAME: ${{ github.repository }}
     permissions:
-      contents: read
-      packages: write
+      contents: read  # Чтение содержимого
+      packages: write  # Запись пакетов
 
     steps:
       - name: Checkout code
@@ -97,7 +97,8 @@ jobs:
             cd igw/lb
             docker compose down || true
             docker system prune -f || true
-            docker pull ghcr.io/${{ github.repository }}:latest
+            docker pull ghcr.io/${{ github.repository }}:latest || true
+            
             docker compose up -d --build
             
             echo "Deployment completed successfully."
