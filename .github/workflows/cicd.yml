@@ -37,12 +37,6 @@ jobs:
 
   sonarcloud:
     runs-on: ubuntu-latest
-    needs: build
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: "https://sonarcloud.io"
-      SONAR_PROJECT_KEY: "lb"
-      SONAR_ORG_KEY: "isntrui"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -53,18 +47,20 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build with Gradle Wrapper
-        run: ./gradlew build
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v2
 
-      - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: '.'
-          args: >
-            -Dsonar.projectKey=lb
-            -Dsonar.organization=isntrui
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      - name: Build and test
+        run: ./gradlew clean build jacocoTestReport
+
+      - name: SonarQube analysis
+        run: |
+          ./gradlew sonarqube \
+            -Dsonar.projectKey=lb \
+            -Dsonar.organization=isntrui \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
 
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -124,13 +120,13 @@ jobs:
             export DBPASS=${{ secrets.DBPASS }}
             export SIGNING_KEY=${{ secrets.SIGNING_KEY }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
-          
+            
             cd igw/lb
             docker compose down || true
             docker system prune -f || true
             docker pull ghcr.io/${{ github.repository }}:latest || true
-          
+            
             docker compose up -d --build
-          
+            
             echo "Deployment completed successfully."
           EOF
