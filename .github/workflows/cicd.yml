@@ -53,13 +53,13 @@ jobs:
 
       - name: SonarQube analysis
         run: |
-          ./gradlew sonarqube \
+          ./gradlew sonar \
             -Dsonar.projectKey=lb \
             -Dsonar.organization=isntrui \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
-
+            
   build-and-push-image:
     runs-on: ubuntu-latest
     needs: build
