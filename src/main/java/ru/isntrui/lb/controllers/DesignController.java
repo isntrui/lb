@@ -45,7 +45,7 @@ public class DesignController {
 
     @Operation(summary = "Get all designs")
     @GetMapping("all")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<Design>> getAll() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getAllDesigns());
     }
@@ -77,13 +77,13 @@ public class DesignController {
     }
     @Operation(summary = "Search")
     @GetMapping("search")
-    public ResponseEntity<?> search(@RequestParam @Parameter(description = "Search query") String query) {
+    public ResponseEntity<List<Design>> search(@RequestParam @Parameter(description = "Search query") String query) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.search(query));
     }
     @Operation(summary = "Get design by id")
     @GetMapping("{id}")
-    public ResponseEntity<?> getDesign(@PathVariable @Parameter(description = "DesignID to get") Long id) {
+    public ResponseEntity<Design> getDesign(@PathVariable @Parameter(description = "DesignID to get") Long id) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         Design design = designService.getDesignById(id);
         if (design == null) return ResponseEntity.notFound().build();
@@ -107,7 +107,7 @@ public class DesignController {
 
     @Operation(summary = "Get my designs")
     @GetMapping("my")
-    public ResponseEntity<?> getMy() {
+    public ResponseEntity<List<Design>> getMy() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsByUser(userService.getCurrentUser()));
     }

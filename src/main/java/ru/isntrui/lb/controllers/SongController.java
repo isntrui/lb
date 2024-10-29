@@ -13,6 +13,7 @@ import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @Tag(name = "Song")
@@ -70,14 +71,14 @@ public class SongController {
 
     @Operation(summary = "Get songs for wave")
     @GetMapping("wave")
-    public ResponseEntity<?> get(@RequestParam @Parameter(description = "Wave id to get") Long waveId) {
+    public ResponseEntity<List<Song>> get(@RequestParam @Parameter(description = "Wave id to get") Long waveId) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(songService.getSongsForWave(waveId));
     }
 
     @Operation(summary = "Get song by id")
     @GetMapping("{id}")
-    public ResponseEntity<?> getSong(@PathVariable @Parameter(description = "SongID to get") Long id) {
+    public ResponseEntity<Song> getSong(@PathVariable @Parameter(description = "SongID to get") Long id) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         Song song = songService.getSongById(id);
         if (song == null) return ResponseEntity.notFound().build();
@@ -95,14 +96,14 @@ public class SongController {
     }
     @Operation(summary = "Get my songs")
     @GetMapping("my")
-    public ResponseEntity<?> getMy() {
+    public ResponseEntity<List<Song>> getMy() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(songService.getSongsByUser(us.getCurrentUser()));
     }
 
     @Operation(summary = "Search")
     @GetMapping("search")
-    public ResponseEntity<?> search(@RequestParam @Parameter(description = "Search query") String query) {
+    public ResponseEntity<List<Song>> search(@RequestParam @Parameter(description = "Search query") String query) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(songService.search(query));
     }

@@ -61,7 +61,7 @@ public class WaveController {
 
 
     @PostMapping("create")
-    public ResponseEntity<?> createWave(@RequestBody WaveRequest waveR) {
+    public ResponseEntity<String> createWave(@RequestBody WaveRequest waveR) {
         Wave wave;
         try {
             wave = new Wave(waveR.title(), Date.valueOf(waveR.starts_on()), Date.valueOf(waveR.ends_on()), waveR.status());
@@ -73,8 +73,8 @@ public class WaveController {
             return ResponseEntity.status(403).build();
         }
         try {
-            Wave createdWave = waveService.createWave(wave);
-            return ResponseEntity.ok(createdWave);
+            waveService.createWave(wave);
+            return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             List<Wave> w = waveService.getOverlappingWaves(wave);
             StringBuilder sb = new StringBuilder();
@@ -85,7 +85,7 @@ public class WaveController {
 
     @Operation(summary = "Update wave")
     @PutMapping("{id}/update")
-    public ResponseEntity<?> updateWave(@PathVariable Long id, @RequestBody WaveRequest waveR) {
+    public ResponseEntity<Void> updateWave(@PathVariable Long id, @RequestBody WaveRequest waveR) {
         Optional<Wave> waveOpt = waveService.getWaveById(id);
         if (waveOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -104,7 +104,7 @@ public class WaveController {
 
     @Operation(summary = "Change status")
     @PutMapping("{id}/changeStatus")
-    public ResponseEntity<?> changeStatus(@PathVariable Long id, @RequestParam WaveStatus status) {
+    public ResponseEntity<Void> changeStatus(@PathVariable Long id, @RequestParam WaveStatus status) {
         Optional<Wave> waveOpt = waveService.getWaveById(id);
         if (waveOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -118,7 +118,7 @@ public class WaveController {
 
     @Operation(summary = "Delete wave")
     @DeleteMapping("{id}/delete")
-    public ResponseEntity<?> deleteWave(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteWave(@PathVariable Long id) {
         Optional<Wave> waveOpt = waveService.getWaveById(id);
         if (waveOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
