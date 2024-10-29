@@ -3,7 +3,6 @@ package ru.isntrui.lb.models
 import jakarta.persistence.*
 import jakarta.validation.constraints.Email
 import org.hibernate.annotations.CreationTimestamp
-import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Entity
@@ -15,6 +14,7 @@ open class Invite(emailC: String, codeC: String) {
     open var id: Long? = null
 
     @Column(unique = true, nullable = false)
+    @Email
     open var email: String? = null
 
     @Column(nullable = false)

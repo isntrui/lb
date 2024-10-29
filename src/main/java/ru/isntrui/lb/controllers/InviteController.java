@@ -15,7 +15,6 @@ import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Tag(name = "Invite")
 @RestController
@@ -35,7 +34,11 @@ public class InviteController {
     public ResponseEntity<Void> create(@RequestBody InviteQuery query) {
         System.out.println(userService.getCurrentUser());
         if (userService.getCurrentUser().getRole().toString().equals(Role.HEAD.toString()) || userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.ADMIN)) {
-            inviteService.create(query.email(), query.inviteCode());
+            try {
+                inviteService.create(query.email(), query.inviteCode());
+            } catch (RuntimeException ex) {
+                return ResponseEntity.badRequest().build();
+            }
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();

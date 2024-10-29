@@ -2,16 +2,19 @@ package ru.isntrui.lb.models;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.isntrui.lb.enums.Role;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -28,6 +31,7 @@ public class User implements UserDetails {
 
     @Column(unique = true, nullable = false)
     @Getter(AccessLevel.PUBLIC)
+    @Email
     private String email;
 
     private String password;

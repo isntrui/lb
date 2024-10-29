@@ -8,14 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Design;
-import ru.isntrui.lb.models.Text;
 import ru.isntrui.lb.services.DesignService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @Tag(name = "Design")

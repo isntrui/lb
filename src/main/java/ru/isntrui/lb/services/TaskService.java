@@ -75,14 +75,6 @@ public class TaskService {
     }
 
     @Transactional
-    public void uncompleteTask(Long taskId) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
-        task.setCompleted(false);
-        task.setTaskStatus(TaskStatus.PROGRESS);
-        taskRepository.save(task);
-    }
-
-    @Transactional
     public void updateTask(Task task) {
         taskRepository.save(task);
     }

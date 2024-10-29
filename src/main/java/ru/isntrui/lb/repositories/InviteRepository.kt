@@ -10,14 +10,14 @@ import ru.isntrui.lb.models.Invite
 
 @Repository
 interface InviteRepository : JpaRepository<Invite, Long> {
-    public fun findByCode(code: String): Invite?
+    fun findByCode(code: String): Invite?
 
     @Query("SELECT i FROM Invite i")
-    fun getAllInvites(): List<Invite>;
+    fun getAllInvites(): List<Invite>
 
     @Transactional
     @Modifying
-    public fun deleteByCode(code: String)
+    fun deleteByCode(code: String)
 
     @Modifying
     @Query("UPDATE Invite i SET i.isUsed = true, i.usedBy.id = :userId WHERE i.code = :code")

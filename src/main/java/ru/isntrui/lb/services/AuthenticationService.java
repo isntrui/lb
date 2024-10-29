@@ -48,7 +48,11 @@ public class AuthenticationService {
                 .lastName(request.getLastName())
                 .graduateYear(request.getYear())
                 .build();
-        userService.create(user);
+        try {
+            userService.create(user);
+        } catch (Exception ex) {
+            throw new RuntimeException();
+        }
         inviteService.use(request.getInviteCode(), user.getId());
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);

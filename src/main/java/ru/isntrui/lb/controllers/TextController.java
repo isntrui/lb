@@ -111,9 +111,9 @@ public class TextController {
     @Operation(summary = "Update text")
     @PutMapping("update")
     public ResponseEntity<Void> updateText(@RequestParam @Parameter(description = "Text id") Long id, @RequestParam @Parameter(description = "Title of updated text") String title, @RequestParam @Parameter(description = "Body of updated text") String text) {
-        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || Objects.equals(us.getCurrentUser().getId(), ts.getById(id).get().getId())) {
-            Optional<Text> t = ts.getById(id);
-            if (t.isEmpty()) return ResponseEntity.notFound().build();
+        Optional<Text> t = ts.getById(id);
+        if (t.isEmpty()) return ResponseEntity.notFound().build();
+        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || Objects.equals(us.getCurrentUser().getId(), t.get().getId())) {
             Text newT = t.get();
             newT.setTitle(title);
             newT.setBody(text);

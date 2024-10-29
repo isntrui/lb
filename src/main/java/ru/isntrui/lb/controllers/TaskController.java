@@ -13,6 +13,8 @@ import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.services.TaskService;
 import ru.isntrui.lb.services.UserService;
+
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -71,7 +73,7 @@ public class TaskController {
         if (t.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN) || userService.getCurrentUser().getId().equals(t.get().getTakenBy().getId()))) {
+        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN) || userService.getCurrentUser().getId().equals(Objects.requireNonNull(t.get().getTakenBy()).getId()))) {
             return ResponseEntity.status(403).build();
         }
 
