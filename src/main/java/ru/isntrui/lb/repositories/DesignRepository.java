@@ -16,7 +16,7 @@ import java.util.List;
 public interface DesignRepository extends JpaRepository<Design, Long> {
     @Transactional
     @Modifying
-    @Query("update Design d set d.isApproved = ?2, d.approvedOn = :dateTime, d.approvedBy = :user where d.id = ?1")
+    @Query("update Design d set d.isApproved = :isApproved, d.approvedOn = :dateTime, d.approvedBy = :user where d.id = :designId")
     void approveDesign(Long designId, boolean isApproved, LocalDateTime dateTime, User user);
     List<Design> findByWaveId(Long waveId);
     List<Design> getAllByCreatedBy(User user);
