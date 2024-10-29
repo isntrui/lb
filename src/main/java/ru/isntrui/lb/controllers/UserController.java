@@ -22,6 +22,15 @@ public class UserController {
         this.us = us;
     }
 
+    @Operation(summary = "Set user's avatar")
+    @PutMapping("/setAvatar")
+    public ResponseEntity<Void> setAvatar(
+            @RequestParam @Parameter(description = "Avatar's url") String url
+    ) {
+        us.setAvatar(us.getCurrentUser().getId(), url);
+        return ResponseEntity.ok().build();
+    }
+
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
     public ResponseEntity<User> getUserById(@PathVariable @Parameter(description = "User's id") Long id) {

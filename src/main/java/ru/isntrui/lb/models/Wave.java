@@ -22,8 +22,8 @@ public class Wave {
     private Long id;
 
     private String title;
-    private Date starts_on;
-    private Date ends_on;
+    private Date startsOn;
+    private Date endsOn;
 
     @Enumerated(EnumType.STRING)
     private WaveStatus status;
@@ -38,14 +38,14 @@ public class Wave {
     public Wave(String title, Date s, Date s1, WaveStatus status) {
         this.title = title;
         this.status = status;
-        this.starts_on = s;
-        this.ends_on = s1;
+        this.startsOn = s;
+        this.endsOn = s1;
     }
 
     public Wave() {
         title = "null";
-        starts_on = Date.valueOf(LocalDate.of(2024, 1, 1));
-        ends_on = Date.valueOf(LocalDate.of(2024, 1, 2));
+        startsOn = Date.valueOf(LocalDate.of(2024, 1, 1));
+        endsOn = Date.valueOf(LocalDate.of(2024, 1, 2));
         status = WaveStatus.PLANNED;
     }
 }

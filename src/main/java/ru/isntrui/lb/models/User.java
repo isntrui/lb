@@ -47,7 +47,7 @@ public class User implements UserDetails {
     private String building;
 
     @CreationTimestamp
-    private LocalDateTime registered_on;
+    private LocalDateTime registeredOn;
     private String tgUsername;
     @Column(unique = true)
     private String username;
@@ -126,11 +126,6 @@ public class User implements UserDetails {
 
         public UserBuilder building(String buildingB) {
             user.setBuilding(buildingB);
-            return this;
-        }
-
-        public UserBuilder avatarUrl(String avatarUrlB) {
-            user.setAvatarUrl(avatarUrlB);
             return this;
         }
 

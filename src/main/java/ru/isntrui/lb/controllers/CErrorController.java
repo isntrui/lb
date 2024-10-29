@@ -14,18 +14,15 @@ import org.springframework.web.context.request.ServletWebRequest;
 import java.util.Map;
 
 @Controller
-public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
-
-    private static final String ERROR_PATH = "/error";
-
+public class CErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
     private final ErrorAttributes errorAttributes;
 
     @Autowired
-    public ErrorController(ErrorAttributes errorAttributes) {
+    public CErrorController(ErrorAttributes errorAttributes) {
         this.errorAttributes = errorAttributes;
     }
 
-    @RequestMapping(path = ERROR_PATH, method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(path = "/error", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> handleError(HttpServletRequest request) {
         Map<String, Object> errorDetails = errorAttributes.getErrorAttributes(
                 new ServletWebRequest(request),

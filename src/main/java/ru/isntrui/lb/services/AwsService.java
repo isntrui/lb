@@ -4,11 +4,11 @@ import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.client.config.ClientOverrideConfiguration;
+import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.http.apache.ApacheHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import software.amazon.awssdk.core.sync.RequestBody;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +20,7 @@ public class AwsService {
 
     private final String accessKeyId = System.getenv("AWS_ACCESS_KEY_ID");
     private final String secretAccessKey = System.getenv("AWS_SECRET_ACCESS_KEY");
-    private final String region = "ru-central1";
+    private final static String region = "ru-central1";
 
     private final S3Client s3Client = S3Client.builder()
             .region(Region.of(region))

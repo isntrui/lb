@@ -29,7 +29,7 @@ public class WaveService {
     }
 
     public Wave createWave(Wave wave) {
-        List<Wave> overlappingWaves = waveRepository.findOverlappingWaves(wave.getStarts_on().toLocalDate(), wave.getEnds_on().toLocalDate());
+        List<Wave> overlappingWaves = waveRepository.findOverlappingWaves(wave.getStartsOn().toLocalDate(), wave.getEndsOn().toLocalDate());
 
         if (!overlappingWaves.isEmpty()) {
             throw new IllegalArgumentException("Невозможно создать волну: период пересекается с уже существующей волной.");
@@ -48,6 +48,6 @@ public class WaveService {
     }
 
     public List<Wave> getOverlappingWaves(Wave wave) {
-        return waveRepository.findOverlappingWaves(wave.getStarts_on().toLocalDate(), wave.getEnds_on().toLocalDate());
+        return waveRepository.findOverlappingWaves(wave.getStartsOn().toLocalDate(), wave.getEndsOn().toLocalDate());
     }
 }

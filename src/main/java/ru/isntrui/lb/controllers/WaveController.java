@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
+import ru.isntrui.lb.enums.WaveStatus;
 import ru.isntrui.lb.models.Song;
 import ru.isntrui.lb.models.Text;
 import ru.isntrui.lb.models.Wave;
@@ -80,5 +81,52 @@ public class WaveController {
             w.forEach(s -> sb.append(s.getId()).append("\"").append(s.getTitle()).append("\", "));
             return ResponseEntity.badRequest().body("Невозможно создать волну: период пересекается с уже существующими волнами: " + sb);
         }
+    }
+
+    @Operation(summary = "Update wave")
+    @PutMapping("{id}/update")
+    public ResponseEntity<?> updateWave(@PathVariable Long id, @RequestBody WaveRequest waveR) {
+        Optional<Wave> waveOpt = waveService.getWaveById(id);
+        if (waveOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!(userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD || userService.getCurrentUser().getRole() == Role.ADMIN)) {
+            return ResponseEntity.status(403).build();
+        }
+        Wave wave = waveOpt.get();
+        wave.setTitle(waveR.title() == null ? wave.getTitle() : waveR.title());
+        wave.setStartsOn(Date.valueOf(waveR.starts_on() == null ? wave.getStartsOn().toString() : waveR.starts_on()));
+        wave.setEndsOn(Date.valueOf(waveR.ends_on() == null ? wave.getEndsOn().toString() : waveR.ends_on()));
+        wave.setStatus(waveR.status() == null ? wave.getStatus() : waveR.status());
+        waveService.updateWave(wave);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Change status")
+    @PutMapping("{id}/changeStatus")
+    public ResponseEntity<?> changeStatus(@PathVariable Long id, @RequestParam WaveStatus status) {
+        Optional<Wave> waveOpt = waveService.getWaveById(id);
+        if (waveOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!(userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD || userService.getCurrentUser().getRole() == Role.ADMIN)) {
+            return ResponseEntity.status(403).build();
+        }
+        waveService.updateWaveStatus(id, status);
+        return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Delete wave")
+    @DeleteMapping("{id}/delete")
+    public ResponseEntity<?> deleteWave(@PathVariable Long id) {
+        Optional<Wave> waveOpt = waveService.getWaveById(id);
+        if (waveOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        if (!(userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD || userService.getCurrentUser().getRole() == Role.ADMIN)) {
+            return ResponseEntity.status(403).build();
+        }
+        waveService.deleteWave(id);
+        return ResponseEntity.ok().build();
     }
 }
