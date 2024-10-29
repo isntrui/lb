@@ -14,8 +14,6 @@ public class SongService {
 
     @Autowired
     private SongRepository songRepository;
-    @Autowired
-    private UserService userService;
     @Transactional
     public void approveSong(Long songId, boolean isApproved) {
         songRepository.approveSong(songId, isApproved);

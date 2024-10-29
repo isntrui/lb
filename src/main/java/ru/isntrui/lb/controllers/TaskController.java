@@ -13,7 +13,6 @@ import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.services.TaskService;
 import ru.isntrui.lb.services.UserService;
-import java.sql.Date;
 import java.util.Optional;
 
 @RestController
@@ -43,7 +42,6 @@ public class TaskController {
         if (task.getTaskStatus() == null) {
             task.setTaskStatus(TaskStatus.TODO);
         }
-
 
         taskService.create(task);
         return ResponseEntity.ok(task);

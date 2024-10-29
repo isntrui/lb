@@ -10,16 +10,18 @@ import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Design;
 import ru.isntrui.lb.services.DesignService;
 import ru.isntrui.lb.services.UserService;
+import ru.isntrui.lb.services.WaveService;
 
 @RestController
 @Tag(name = "Design")
-@RequestMapping("/api/designs/")
+@RequestMapping("/api/design/")
 public class DesignController {
     @Autowired
     private DesignService designService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private WaveService ws;
     private boolean isPermitted() {
         return userService.getCurrentUser().getRole() != Role.ADMIN && userService.getCurrentUser().getRole() != Role.COORDINATOR && userService.getCurrentUser().getRole() != Role.HEAD && userService.getCurrentUser().getRole() != Role.DESIGNER;
     }
@@ -29,6 +31,7 @@ public class DesignController {
     public ResponseEntity<Void> create(@RequestBody @Parameter(description = "New design") Design design) {
         design.setCreatedBy(userService.getCurrentUser());
         designService.createDesign(design);
+        design.setWave(ws.getLastCreatedWave().orElse(null));
         return ResponseEntity.ok().build();
     }
 

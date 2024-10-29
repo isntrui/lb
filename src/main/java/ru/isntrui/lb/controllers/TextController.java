@@ -29,13 +29,13 @@ public class TextController {
     @Operation(summary = "Save new text")
     @PostMapping("save")
     public ResponseEntity<Void> saveText(@RequestParam @Parameter(description = "Title of new text") String title, @RequestParam @Parameter(description = "Body of new text") String text) {
-        Text t = new Text();
-        t.setMadeBy(us.getCurrentUser());
-        t.setApproved(false);
-        t.setBody(text);
-        t.setTitle(title);
-        t.setWave(ws.getLastCreatedWave().orElse(null));
         if (us.getCurrentUser().getRole() == Role.WRITER || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR) {
+            Text t = new Text();
+            t.setMadeBy(us.getCurrentUser());
+            t.setApproved(false);
+            t.setBody(text);
+            t.setTitle(title);
+            t.setWave(ws.getLastCreatedWave().orElse(null));
             ts.create(t);
             return ResponseEntity.ok().build();
         }

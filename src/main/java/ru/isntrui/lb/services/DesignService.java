@@ -29,8 +29,8 @@ public class DesignService {
         designRepository.deleteById(designId);
     }
 
-    public Design createDesign(Design design) {
-        return designRepository.save(design);
+    public void createDesign(Design design) {
+        designRepository.save(design);
     }
 
     public List<Design> getDesignsForWave(Long waveId) {
