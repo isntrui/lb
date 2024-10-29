@@ -17,10 +17,10 @@ import java.time.Duration;
 
 @Service
 public class AwsService {
+    private final static String REGION = "ru-central1";
 
     private final String accessKeyId = System.getenv("AWS_ACCESS_KEY_ID");
     private final String secretAccessKey = System.getenv("AWS_SECRET_ACCESS_KEY");
-    private final static String REGION = "ru-central1";
 
     private final S3Client s3Client = S3Client.builder()
             .region(Region.of(REGION))

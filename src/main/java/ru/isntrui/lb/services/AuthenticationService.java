@@ -51,7 +51,7 @@ public class AuthenticationService {
         try {
             userService.create(user);
         } catch (Exception ex) {
-            throw new RuntimeException();
+            throw new IllegalArgumentException();
         }
         inviteService.use(request.getInviteCode(), user.getId());
         var jwt = jwtService.generateToken(user);
