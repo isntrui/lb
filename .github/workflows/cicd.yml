@@ -26,7 +26,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
       - name: Build with Gradle Wrapper
-        run: ./gradlew build
+        run: ./gradlew build jacocoTestReport
 
       - name: Generate and submit dependency graph
         uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
@@ -50,10 +50,12 @@ jobs:
 
       - name: Install SonarScanner CLI
         run: |
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonar-scanner.zip -d $HOME
+          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+          unzip sonar-scanner-cli.zip -d $HOME
+          echo "export PATH=$HOME/sonar-scanner-4.6.2.2472-linux/bin:\$PATH" >> $GITHUB_ENV
+          # Ensure sonar-scanner is available in this step
           export PATH="$HOME/sonar-scanner-4.6.2.2472-linux/bin:$PATH"
-
+          sonar-scanner --version  # Check if sonar-scanner is correctly installed
 
       - name: SonarCloud Scan
         run: |
@@ -61,8 +63,9 @@ jobs:
             -Dsonar.projectKey=isntrui_lb \
             -Dsonar.organization=isntrui \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+
 
   build-and-push-image:
     runs-on: ubuntu-latest
