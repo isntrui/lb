@@ -21,12 +21,16 @@ import java.util.logging.Logger;
 @RequestMapping("/api/text/")
 @Tag(name = "Text")
 public class TextController {
+    private final TextService ts;
+    private final UserService us;
+    private final WaveService ws;
+
     @Autowired
-    private TextService ts;
-    @Autowired
-    private UserService us;
-    @Autowired
-    private WaveService ws;
+    public TextController(TextService ts, UserService us, WaveService ws) {
+        this.ts = ts;
+        this.us = us;
+        this.ws = ws;
+    }
 
     @Operation(summary = "Save new text")
     @PostMapping("save")

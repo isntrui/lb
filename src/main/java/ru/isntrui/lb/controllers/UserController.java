@@ -2,14 +2,11 @@ package ru.isntrui.lb.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
-import ru.isntrui.lb.exceptions.UnauthorizedException;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.UserService;
@@ -18,9 +15,12 @@ import ru.isntrui.lb.services.UserService;
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
+    private final UserService us;
 
     @Autowired
-    UserService us;
+    public UserController(UserService us) {
+        this.us = us;
+    }
 
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
@@ -76,26 +76,6 @@ public class UserController {
             return ResponseEntity.notFound().build();
         }
         us.changeRole(email, role);
-        return ResponseEntity.ok().build();
-    }
-
-    @Operation(summary = "Change user's password")
-    @PutMapping("{id}/changePassword")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "404", description = "User not found"),
-            @ApiResponse(responseCode = "200", description = "Password changed")
-    })
-    public ResponseEntity<Void> changePassword(
-            @RequestParam @Parameter(description = "Crypt old password") String oldPassword,
-            @RequestParam @Parameter(description = "Crypt new password") String newPassword) {
-        try {
-            us.changePassword(us.getCurrentUser().getId(), oldPassword, newPassword);
-        } catch (UnauthorizedException ex) {
-            return ResponseEntity.status(401).body(null);
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        }
         return ResponseEntity.ok().build();
     }
 

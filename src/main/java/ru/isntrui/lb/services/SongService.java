@@ -13,11 +13,16 @@ import java.util.List;
 @Service
 public class SongService {
 
+    private final SongRepository songRepository;
+
     @Autowired
-    private SongRepository songRepository;
+    public SongService(SongRepository songRepository) {
+        this.songRepository = songRepository;
+    }
+
     @Transactional
     public void approveSong(Long songId, boolean isApproved, LocalDateTime dateTime, User user) {
-        songRepository.approveSong(songId, isApproved);
+        songRepository.approveSong(songId, isApproved, dateTime, user);
     }
 
     public List<Song> getAllSongs() {
@@ -31,8 +36,9 @@ public class SongService {
     public List<Song> search(String title) {
         return songRepository.findByTitleContaining(title);
     }
-    public Song createSong(Song song) {
-        return songRepository.save(song);
+
+    public void createSong(Song song) {
+        songRepository.save(song);
     }
 
     public List<Song> getSongsForWave(Long waveId) {

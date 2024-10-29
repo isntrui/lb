@@ -22,11 +22,14 @@ import java.util.logging.Logger;
 @RequestMapping("/api/aws/")
 @Tag(name = "AWS")
 public class AwsController {
-    @Autowired
-    private UserService us;
+    private final UserService us;
+    private final AwsService aws;
 
     @Autowired
-    private AwsService aws;
+    public AwsController(UserService us, AwsService aws) {
+        this.us = us;
+        this.aws = aws;
+    }
 
     @Operation(summary = "Upload file to AWS")
     @PostMapping("/upload")

@@ -103,7 +103,6 @@ public class TaskController {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN) || userService.getCurrentUser().getId().equals(Objects.requireNonNull(t.get().getTakenBy()).getId()))) {
             return ResponseEntity.status(403).build();
         }
-
         Task task = t.get();
         task.setCompleted(isCompleted);
         task.setTaskStatus(isCompleted ? TaskStatus.DONE : TaskStatus.PROGRESS);

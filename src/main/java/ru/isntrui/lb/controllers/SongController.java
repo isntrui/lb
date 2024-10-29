@@ -18,12 +18,17 @@ import java.time.LocalDateTime;
 @Tag(name = "Song")
 @RequestMapping("/api/song/")
 public class SongController {
+    private final SongService songService;
+    private final UserService us;
+    private final WaveService ws;
+
     @Autowired
-    private SongService songService;
-    @Autowired
-    private UserService us;
-    @Autowired
-    private WaveService ws;
+    public SongController(SongService songService, UserService us, WaveService ws) {
+        this.songService = songService;
+        this.us = us;
+        this.ws = ws;
+    }
+
     private boolean isPermitted() {
         return us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.COORDINATOR && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.SOUNDDESIGNER;
     }

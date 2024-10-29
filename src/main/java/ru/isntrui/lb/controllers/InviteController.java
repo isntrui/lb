@@ -20,10 +20,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/invite/")
 public class InviteController {
+    private final InviteService inviteService;
+    private final UserService userService;
+
     @Autowired
-    private InviteService inviteService;
-    @Autowired
-    private UserService userService;
+    public InviteController(InviteService inviteService, UserService userService) {
+        this.inviteService = inviteService;
+        this.userService = userService;
+    }
 
     @Operation(summary = "Create new invite")
     @ApiResponses(value = {
@@ -56,5 +60,17 @@ public class InviteController {
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
         }
         return ResponseEntity.ok(inviteService.getAllInvites());
+    }
+
+    @DeleteMapping("delete")
+    public ResponseEntity<Void> delete(@RequestParam String code) {
+        if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
+            return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
+        }
+        if (inviteService.findByCode(code) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        inviteService.delete(code);
+        return ResponseEntity.ok().build();
     }
 }

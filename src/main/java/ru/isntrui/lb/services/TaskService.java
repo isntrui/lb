@@ -3,9 +3,6 @@ package ru.isntrui.lb.services;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ru.isntrui.lb.enums.TaskStatus;
-import ru.isntrui.lb.exceptions.tasks.TaskAlreadyTakenException;
-import ru.isntrui.lb.exceptions.tasks.TaskNotFoundException;
 import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.TaskRepository;
@@ -23,13 +20,6 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public void changeTaskStatus(Long taskId, TaskStatus newStatus) {
-        int updatedRows = taskRepository.updateTaskStatus(taskId, newStatus);
-        if (updatedRows == 0) {
-            throw new TaskNotFoundException(taskId);
-        }
-    }
-
     public Optional<Task> getTaskById(Long taskId) {
         return taskRepository.findById(taskId);
     }
@@ -40,16 +30,6 @@ public class TaskService {
 
     public void delete(Long taskId) {
         taskRepository.deleteById(taskId);
-    }
-
-    @Transactional
-    public void takeTask(Long taskId, User user) {
-        Task task = taskRepository.findById(taskId).orElseThrow(() -> new TaskNotFoundException(taskId));
-        if (task.getTakenBy() != null) {
-            throw new TaskAlreadyTakenException(taskId);
-        }
-        task.setTakenBy(user);
-        taskRepository.save(task);
     }
 
     public List<Task> getTasksByUser(User user) {

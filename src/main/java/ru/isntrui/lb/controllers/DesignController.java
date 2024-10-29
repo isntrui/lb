@@ -20,12 +20,16 @@ import java.util.Objects;
 @Tag(name = "Design")
 @RequestMapping("/api/design/")
 public class DesignController {
+    private final DesignService designService;
+    private final UserService userService;
+    private final WaveService ws;
+
     @Autowired
-    private DesignService designService;
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private WaveService ws;
+    public DesignController(DesignService designService, UserService userService, WaveService ws) {
+        this.designService = designService;
+        this.userService = userService;
+        this.ws = ws;
+    }
     private boolean isPermitted() {
         return userService.getCurrentUser().getRole() != Role.ADMIN && userService.getCurrentUser().getRole() != Role.COORDINATOR && userService.getCurrentUser().getRole() != Role.HEAD && userService.getCurrentUser().getRole() != Role.DESIGNER;
     }

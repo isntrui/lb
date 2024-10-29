@@ -18,8 +18,12 @@ public class ErrorController implements org.springframework.boot.web.servlet.err
 
     private static final String ERROR_PATH = "/error";
 
+    private final ErrorAttributes errorAttributes;
+
     @Autowired
-    private ErrorAttributes errorAttributes;
+    public ErrorController(ErrorAttributes errorAttributes) {
+        this.errorAttributes = errorAttributes;
+    }
 
     @RequestMapping(path = ERROR_PATH, method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseEntity<String> handleError(HttpServletRequest request) {

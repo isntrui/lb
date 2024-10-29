@@ -26,16 +26,18 @@ import java.util.Optional;
 @RequestMapping("/api/wave/")
 @Tag(name="Wave")
 public class WaveController {
-    @Autowired
-    private WaveService waveService;
+    private final WaveService waveService;
+    private final SongService songService;
+    private final TextService textService;
+    private final UserService userService;
 
     @Autowired
-    private SongService songService;
-
-    @Autowired
-    private TextService textService;
-    @Autowired
-    private UserService userService;
+    public WaveController(WaveService waveService, SongService songService, TextService textService, UserService userService) {
+        this.waveService = waveService;
+        this.songService = songService;
+        this.textService = textService;
+        this.userService = userService;
+    }
 
     @Operation(summary = "Get all songs and texts of a wave")
     @ApiResponses(value = {

@@ -12,9 +12,13 @@ import java.util.List;
 
 @Service
 public class DesignService {
+    private final DesignRepository designRepository;
 
     @Autowired
-    private DesignRepository designRepository;
+    public DesignService(DesignRepository designRepository) {
+        this.designRepository = designRepository;
+    }
+
     @Transactional
     public void approveDesign(Long designId, boolean isApproved, LocalDateTime dateTime, User user) {
         designRepository.approveDesign(designId, isApproved, dateTime, user);

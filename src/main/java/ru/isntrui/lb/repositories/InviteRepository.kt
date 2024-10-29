@@ -19,6 +19,7 @@ interface InviteRepository : JpaRepository<Invite, Long> {
     @Modifying
     fun deleteByCode(code: String)
 
+    @Transactional
     @Modifying
     @Query("UPDATE Invite i SET i.isUsed = true, i.usedBy.id = :userId WHERE i.code = :code")
     fun setUsed(@Param("code") code: String, @Param("userId") userId: Long)
