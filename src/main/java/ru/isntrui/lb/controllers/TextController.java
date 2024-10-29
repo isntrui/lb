@@ -14,6 +14,8 @@ import ru.isntrui.lb.services.WaveService;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/text/")
@@ -50,7 +52,7 @@ public class TextController {
             try {
                 ts.approve(textId, approve);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Logger.getLogger("Text").log(Level.SEVERE, "Error while getting current user", ex);
                 return ResponseEntity.badRequest().build();
             }
             return ResponseEntity.ok().build();
