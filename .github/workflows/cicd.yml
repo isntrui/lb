@@ -23,7 +23,8 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
       - name: Build with Gradle Wrapper
         run: ./gradlew build
 
@@ -43,9 +44,9 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v2
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+        
 
       - name: Build and test
         run: ./gradlew clean build jacocoTestReport
