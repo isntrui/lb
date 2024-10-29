@@ -30,8 +30,8 @@ public class DesignController {
     @PostMapping("create")
     public ResponseEntity<Void> create(@RequestBody @Parameter(description = "New design") Design design) {
         design.setCreatedBy(userService.getCurrentUser());
-        designService.createDesign(design);
         design.setWave(ws.getLastCreatedWave().getFirst());
+        designService.createDesign(design);
         return ResponseEntity.ok().build();
     }
 
