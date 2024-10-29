@@ -17,7 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import ru.isntrui.lb.services.JwtAuthenticationFilter;
 import ru.isntrui.lb.services.UserService;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+
 import java.util.List;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
@@ -32,7 +32,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
                 .cors(cors -> cors.configurationSource(request -> {
                     var corsConfiguration = new CorsConfiguration();
                     corsConfiguration.setAllowedOriginPatterns(List.of("*"));
@@ -42,7 +42,6 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
-                        // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
                         .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/song/**", "/api/design/**", "/api/wave/**").authenticated()
                         .anyRequest().permitAll())
 
