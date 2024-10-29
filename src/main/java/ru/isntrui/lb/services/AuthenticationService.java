@@ -2,6 +2,8 @@ package ru.isntrui.lb.services;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +25,7 @@ public class AuthenticationService {
     private final InviteService inviteService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
 
     /**
      * Регистрация пользователя
@@ -30,7 +33,7 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signUp(@NotNull SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(@NotNull SignUpRequest request, String ip) {
         if (inviteService.findByCode(request.getInviteCode()) == null) {
             throw new RuntimeException("Приглашение не найдено");
         }
@@ -55,6 +58,7 @@ public class AuthenticationService {
         }
         inviteService.use(request.getInviteCode(), user.getId());
         var jwt = jwtService.generateToken(user);
+        logger.atInfo().log("User registered:\n" + user + "\nInvite code: " + request.getInviteCode() + "\nIP: " + ip);
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -64,7 +68,7 @@ public class AuthenticationService {
      * @param request данные пользователя
      * @return токен
      */
-    public JwtAuthenticationResponse signIn(@NotNull SignInRequest request) {
+    public JwtAuthenticationResponse signIn(@NotNull SignInRequest request, String ip) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),
                 request.getPassword()
@@ -75,10 +79,11 @@ public class AuthenticationService {
                 .loadUserByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);
+        logger.atInfo().log("Logged in using password:\n" + user + "\nIP: " + ip);
         return new JwtAuthenticationResponse(jwt);
     }
 
-    public void changePassword(@NotNull ChangePasswordRequest cp) throws UserNotFoundException{
+    public void changePassword(@NotNull ChangePasswordRequest cp, String ip) throws UserNotFoundException {
         User user;
         try {
             user = userService.getUserByEmail(cp.email());
@@ -93,5 +98,6 @@ public class AuthenticationService {
         }
         user.setPassword(passwordEncoder.encode(cp.password()));
         userService.changePassword(user.getEmail(), user.getPassword());
+        logger.atInfo().log("Password changed. User:\n" + user + "\nIP: " + ip);
     }
 }

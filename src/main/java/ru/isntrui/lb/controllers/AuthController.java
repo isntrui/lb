@@ -3,6 +3,7 @@ package ru.isntrui.lb.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +24,9 @@ public class AuthController {
 
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
-    public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request, HttpServletRequest req) {
         try {
-            return ResponseEntity.ok().body(authenticationService.signUp(request));
+            return ResponseEntity.ok().body(authenticationService.signUp(request, req.getRemoteAddr()));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
@@ -33,9 +34,9 @@ public class AuthController {
 
     @Operation(summary = "Auth user")
     @PostMapping("sign-in")
-    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request, HttpServletRequest req) {
         try {
-            return ResponseEntity.ok().body(authenticationService.signIn(request));
+            return ResponseEntity.ok().body(authenticationService.signIn(request, req.getRemoteAddr()));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }    }
@@ -43,9 +44,9 @@ public class AuthController {
     @Operation(summary = "Change password")
     @PutMapping("changePassword")
     @PostMapping("change-password")
-    public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest cp) {
+    public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest cp, HttpServletRequest req) {
         try {
-            authenticationService.changePassword(cp);
+            authenticationService.changePassword(cp, req.getRemoteAddr());
             return ResponseEntity.ok("Пароль успешно изменён");
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(404).body(e.getMessage());
