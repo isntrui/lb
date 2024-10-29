@@ -40,6 +40,9 @@ jobs:
     needs: build
     env:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: "https://sonarcloud.io"
+      SONAR_PROJECT_KEY: "lb"
+      SONAR_ORG_KEY: "isntrui"
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -121,13 +124,13 @@ jobs:
             export DBPASS=${{ secrets.DBPASS }}
             export SIGNING_KEY=${{ secrets.SIGNING_KEY }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
-            
+          
             cd igw/lb
             docker compose down || true
             docker system prune -f || true
             docker pull ghcr.io/${{ github.repository }}:latest || true
-            
+          
             docker compose up -d --build
-            
+          
             echo "Deployment completed successfully."
           EOF

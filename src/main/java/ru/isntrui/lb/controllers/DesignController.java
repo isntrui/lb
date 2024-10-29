@@ -13,6 +13,7 @@ import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -66,7 +67,7 @@ public class DesignController {
 
     @Operation(summary = "Get designs for wave")
     @GetMapping("wave")
-    public ResponseEntity<?> get(@RequestParam @Parameter(description = "Wave id to get") Long waveId) {
+    public ResponseEntity<List<Design>> get(@RequestParam @Parameter(description = "Wave id to get") Long waveId) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsForWave(waveId));
     }
