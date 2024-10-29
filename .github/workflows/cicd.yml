@@ -54,7 +54,7 @@ jobs:
       - name: SonarQube analysis
         run: |
           ./gradlew sonar \
-            -Dsonar.projectKey=lb \
+            -Dsonar.projectKey=isntrui_lb \
             -Dsonar.organization=isntrui \
             -Dsonar.host.url=https://sonarcloud.io \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
