@@ -36,7 +36,6 @@ public class InviteController {
     })
     @PostMapping("create")
     public ResponseEntity<Void> create(@RequestBody InviteQuery query) {
-        System.out.println(userService.getCurrentUser());
         if (userService.getCurrentUser().getRole().toString().equals(Role.HEAD.toString()) || userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.ADMIN)) {
             try {
                 inviteService.create(query.email(), query.inviteCode());
@@ -56,7 +55,6 @@ public class InviteController {
     @GetMapping("all")
     public ResponseEntity<List<Invite>> getAll() {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
-            System.out.println(userService.getCurrentUser().getRole().toString() + " - Forbidden");
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
         }
         return ResponseEntity.ok(inviteService.getAllInvites());

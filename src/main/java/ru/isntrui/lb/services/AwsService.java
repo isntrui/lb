@@ -17,8 +17,6 @@ import java.time.Duration;
 
 @Service
 public class AwsService {
-    private final static String REGION = "ru-central1";
-
     private final String accessKeyId = System.getenv("AWS_ACCESS_KEY_ID");
     private final String secretAccessKey = System.getenv("AWS_SECRET_ACCESS_KEY");
 
@@ -51,4 +49,6 @@ public class AwsService {
     public String getFileUrl(String bucketName, String fileName) {
         return String.format("https://storage.yandexcloud.net/%s/%s", bucketName, fileName);
     }
+
+    private final static String REGION = "ru-central1";
 }

@@ -45,7 +45,7 @@ public class SongController {
 
     @Operation(summary = "Get all songs")
     @GetMapping("all")
-    public ResponseEntity<?> getAll() {
+    public ResponseEntity<List<Song>> getAll() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(songService.getAllSongs());
     }
