@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ru.isntrui.lb.models.Song;
+import ru.isntrui.lb.models.User;
 
 import java.util.List;
 
@@ -17,6 +18,6 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     void approveSong(Long songId, boolean isApproved);
     List<Song> getAllSongs();
     List<Song> findByWaveId(Long waveId);
-
+    List<Song> getAllByMadeBy(User user);
 
 }

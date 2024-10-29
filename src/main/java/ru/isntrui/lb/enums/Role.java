@@ -8,5 +8,6 @@ public enum Role {
     HEAD,
     DIRECTOR,
     GRADUATED,
-    ADMIN
+    ADMIN,
+    SOUNDDESIGNER
 }
