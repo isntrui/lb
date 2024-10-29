@@ -48,23 +48,17 @@ jobs:
           distribution: 'temurin'
 
 
-      - name: Install SonarScanner CLI
-        run: |
-          curl -sSLo sonar-scanner-cli.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
-          unzip sonar-scanner-cli.zip -d $HOME
-          echo "export PATH=$HOME/sonar-scanner-4.6.2.2472-linux/bin:\$PATH" >> $GITHUB_ENV
-          # Ensure sonar-scanner is available in this step
-          export PATH="$HOME/sonar-scanner-4.6.2.2472-linux/bin:$PATH"
-          sonar-scanner --version  # Check if sonar-scanner is correctly installed
-
       - name: SonarCloud Scan
-        run: |
-          sonar-scanner \
-            -Dsonar.projectKey=isntrui_lb \
-            -Dsonar.organization=isntrui \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token=${{ secrets.SONAR_TOKEN }} \
+        uses: sonarsource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: '.' 
+          args: >
+            -Dsonar.projectKey=isntrui_lb
+            -Dsonar.organization=isntrui
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
             -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+  
 
 
   build-and-push-image:
