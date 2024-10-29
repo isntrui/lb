@@ -7,7 +7,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.isntrui.lb.exceptions.BadRequestException;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.queries.ChangePasswordRequest;
 import ru.isntrui.lb.queries.JwtAuthenticationResponse;

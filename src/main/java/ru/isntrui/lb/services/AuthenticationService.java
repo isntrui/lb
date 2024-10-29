@@ -84,7 +84,7 @@ public class AuthenticationService {
         if (!passwordEncoder.matches(cp.oldPassword(), user.getPassword())) {
             System.out.println("Old: " + passwordEncoder.encode(cp.oldPassword()));
             System.out.println("User: " + user.getPassword());
-            System.out.println(passwordEncoder.matches(user.getPassword(), cp.oldPassword()));
+            System.out.println(passwordEncoder.matches(cp.oldPassword(),user.getPassword()));
             throw new RuntimeException("Неверный пароль");
         }
         user.setPassword(passwordEncoder.encode(cp.password()));
