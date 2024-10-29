@@ -32,9 +32,11 @@ jobs:
             export DBPASS=${{ secrets.DBPASS }}
             export SIGNING_KEY=${{ secrets.SIGNING_KEY }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
+          
             cd igw/lb
-            git pull
-            docker compose down
-            docker system prune -f
+            git pull origin main && \
+            docker compose down && \
+            docker system prune -f && \
             docker compose up -d --build
+            echo "Deployment completed successfully."
           EOF
