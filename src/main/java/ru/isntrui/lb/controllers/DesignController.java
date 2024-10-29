@@ -8,11 +8,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Design;
+import ru.isntrui.lb.models.Text;
 import ru.isntrui.lb.services.DesignService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 @RestController
 @Tag(name = "Design")
@@ -88,11 +91,15 @@ public class DesignController {
     @Operation(summary = "Update design")
     @PutMapping("{id}/update")
     public ResponseEntity<Void> update(@PathVariable @Parameter(description = "DesignID to update") Long id, @RequestBody @Parameter(description = "New design's obj") Design design) {
-        if (isPermitted()) return ResponseEntity.status(403).build();
         if (designService.getDesignById(id) == null) return ResponseEntity.notFound().build();
-        design.setId(id);
-        designService.createDesign(design);
-        return ResponseEntity.ok().build();
+        if (userService.getCurrentUser().getRole() == Role.HEAD || userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.ADMIN || Objects.equals(userService.getCurrentUser().getId(), designService.getDesignById(id).getId())) {
+            Design t = designService.getDesignById(id);
+            t.setTitle(design.getTitle());
+            t.setUrl(design.getUrl());
+            designService.createDesign(t);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.status(403).build();
     }
 
     @Operation(summary = "Get my designs")

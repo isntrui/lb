@@ -45,7 +45,8 @@ public class Task {
     @Schema(description = "Task's priority", example = "true", defaultValue = "true")
     private boolean isShown = true;
     @Schema(description = "Task's wave", example = "1")
-    private long wave;
+    @ManyToOne
+    private Wave wave;
 
     @ManyToOne
     @Nullable

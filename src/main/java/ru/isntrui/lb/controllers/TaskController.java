@@ -101,7 +101,7 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    @Operation(summary = "Set visibility of invite")
+    @Operation(summary = "Set visibility of task")
     @PutMapping("{id}/visibility")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task visibility updated"),

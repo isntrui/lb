@@ -43,9 +43,7 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(request -> request
                         // Можно указать конкретный путь, * - 1 уровень вложенности, ** - любое количество уровней вложенности
-                        .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/songs/**", "/api/designs/").authenticated()
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/swagger-ui/**", "/api/swagger-resources/**", "/api/oas31/**", "/api/").permitAll()
+                        .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/song/**", "/api/design/**", "/api/wave/**").authenticated()
                         .anyRequest().permitAll())
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))

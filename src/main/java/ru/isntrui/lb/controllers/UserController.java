@@ -7,16 +7,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.UnauthorizedException;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
-import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
-
-import java.util.Objects;
 
 @Tag(name ="User")
 @RestController
@@ -34,6 +30,12 @@ public class UserController {
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @Operation(summary = "Get current user")
+    @GetMapping
+    public ResponseEntity<User> getCurrentUser() {
+        return ResponseEntity.ok(us.getCurrentUser());
     }
 
     @Operation(summary = "Get user by email")
