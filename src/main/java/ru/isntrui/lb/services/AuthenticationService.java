@@ -6,13 +6,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.queries.ChangePasswordRequest;
 import ru.isntrui.lb.queries.JwtAuthenticationResponse;
 import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class AuthenticationService {
             throw new RuntimeException("Приглашение не найдено");
         }
 
-        if (!inviteService.findByCode(request.getInviteCode()).getEmail().equals(request.getEmail())) {
+        if (!Objects.equals(Objects.requireNonNull(inviteService.findByCode(request.getInviteCode())).getEmail(), request.getEmail())) {
             throw new RuntimeException("Email не совпадает с приглашением");
         }
         var user = User.builder()
@@ -74,7 +75,12 @@ public class AuthenticationService {
     }
 
     public void changePassword(@NotNull ChangePasswordRequest cp) throws UserNotFoundException{
-        User user = userService.getUserByEmail(cp.email());
+        User user;
+        try {
+            user = userService.getUserByEmail(cp.email());
+        } catch (UserNotFoundException ex) {
+            throw new UserNotFoundException("Пользователь не найден");
+        }
         if (!passwordEncoder.matches(cp.oldPassword(), user.getPassword())) {
             throw new RuntimeException("Неверный пароль");
         }

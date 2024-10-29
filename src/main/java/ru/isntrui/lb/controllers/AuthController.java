@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.isntrui.lb.exceptions.BadRequestException;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.queries.ChangePasswordRequest;
 import ru.isntrui.lb.queries.JwtAuthenticationResponse;
@@ -23,15 +24,22 @@ public class AuthController {
 
     @Operation(summary = "Register user")
     @PostMapping("/sign-up")
-    public JwtAuthenticationResponse signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
-        return authenticationService.signUp(request);
+    public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
+        try {
+            return ResponseEntity.ok().body(authenticationService.signUp(request));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @Operation(summary = "Auth user")
     @PostMapping("/sign-in")
-    public JwtAuthenticationResponse signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
-        return authenticationService.signIn(request);
-    }
+    public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
+        try {
+            return ResponseEntity.ok().body(authenticationService.signIn(request));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }    }
 
     @Operation(summary = "Change password")
     @PutMapping("changePassword")
@@ -40,6 +48,8 @@ public class AuthController {
             authenticationService.changePassword(request);
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
+        } catch (BadRequestException ex) {
+            return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
     }
