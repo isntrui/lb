@@ -13,8 +13,12 @@ import java.util.Optional;
 
 @Service
 public class WaveService {
+    private final WaveRepository waveRepository;
+
     @Autowired
-    private WaveRepository waveRepository;
+    public WaveService(WaveRepository waveRepository) {
+        this.waveRepository = waveRepository;
+    }
 
     public void deleteWave(Long waveId) {
         waveRepository.deleteById(waveId);
