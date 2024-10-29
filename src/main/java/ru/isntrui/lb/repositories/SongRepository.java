@@ -16,6 +16,8 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Modifying
     @Query("update Song s set s.isApproved = ?2 where s.id = ?1")
     void approveSong(Long songId, boolean isApproved);
+    @Query("select s from Song s")
+    @Transactional
     List<Song> getAllSongs();
     List<Song> findByWaveId(Long waveId);
     List<Song> getAllByMadeBy(User user);
