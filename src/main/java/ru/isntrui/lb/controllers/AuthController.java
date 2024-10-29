@@ -43,14 +43,15 @@ public class AuthController {
 
     @Operation(summary = "Change password")
     @PutMapping("changePassword")
-    public ResponseEntity<Void> changePassword(@RequestBody @Valid @Parameter(description = "Formatted request with new password") ChangePasswordRequest request) {
+    @PostMapping("/change-password")
+    public ResponseEntity<?> changePassword(@Valid @RequestBody ChangePasswordRequest cp) {
         try {
-            authenticationService.changePassword(request);
-        } catch (UserNotFoundException ex) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
+            authenticationService.changePassword(cp);
+            return ResponseEntity.ok("Пароль успешно изменён");
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
         }
-        return ResponseEntity.ok().build();
     }
 }
