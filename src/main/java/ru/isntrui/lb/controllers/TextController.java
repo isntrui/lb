@@ -44,11 +44,11 @@ public class TextController {
 
     @Operation(summary = "Approve text")
     @PutMapping("approve")
-    public ResponseEntity<Void> approveText(@RequestParam @Parameter(description = "Text id") Long textId) {
+    public ResponseEntity<Void> approveText(@RequestParam @Parameter(description = "Text id") Long textId, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
         if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN) {
             if (ts.getById(textId).isEmpty()) return ResponseEntity.notFound().build();
             try {
-                ts.approve(textId);
+                ts.approve(textId, approve);
             } catch (Exception ex) {
                 ex.printStackTrace();
                 return ResponseEntity.badRequest().build();
@@ -64,6 +64,15 @@ public class TextController {
         if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.WRITER) {
 
             return ResponseEntity.ok(ts.findByMadeById(us.getCurrentUser().getId()));
+        }
+        return ResponseEntity.status(403).build();
+    }
+
+    @Operation(summary = "Search")
+    @GetMapping("search")
+    public ResponseEntity<Iterable<Text>> search(@RequestParam @Parameter(description = "Search query") String query) {
+        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN) {
+            return ResponseEntity.ok(ts.findByTitleContaining(query));
         }
         return ResponseEntity.status(403).build();
     }

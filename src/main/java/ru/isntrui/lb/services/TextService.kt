@@ -3,7 +3,6 @@ package ru.isntrui.lb.services
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ru.isntrui.lb.models.Text
-import ru.isntrui.lb.models.User
 import ru.isntrui.lb.repositories.TextRepository
 import java.time.LocalDateTime
 import kotlin.jvm.Throws
@@ -14,7 +13,7 @@ class TextService {
     private lateinit var textRepository: TextRepository
     @Autowired
     private lateinit var userService: UserService
-    public fun findByTitleContaining(title: String) = textRepository.findByTitleContaining(title)
+    public fun findByTitleContaining(title: String) : Iterable<Text> = textRepository.findByTitleContaining(title)
     public fun findByMadeById(id: Long) = textRepository.findByMadeById(id)
     public fun findByApprovedById(id: Long) = textRepository.findByApprovedById(id)
     public fun findByWaveId(id: Long) = textRepository.findByWaveId(id)
@@ -24,8 +23,8 @@ class TextService {
     public fun deleteById(id: Long) = textRepository.deleteById(id)
 
     @Throws(Exception::class)
-    public fun approve(id: Long) {
-        textRepository.approve(id, true, userService.currentUser, LocalDateTime.now())
+    public fun approve(id: Long, approve: Boolean) {
+        textRepository.approve(id, approve, userService.currentUser, LocalDateTime.now())
     }
     public fun update(id: Long, updatedText: Text): Text? {
         val existingTextOpt = textRepository.findById(id)
@@ -45,8 +44,5 @@ class TextService {
         } else {
             null
         }
-    }
-    public fun disapprove(id: Long) {
-        textRepository.approve(id, false, userService.currentUser, LocalDateTime.now())
     }
 }

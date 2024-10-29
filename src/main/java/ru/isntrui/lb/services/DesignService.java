@@ -7,6 +7,7 @@ import ru.isntrui.lb.models.Design;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.DesignRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -14,10 +15,9 @@ public class DesignService {
 
     @Autowired
     private DesignRepository designRepository;
-
     @Transactional
-    public void approveDesign(Long designId, boolean isApproved) {
-        designRepository.approveDesign(designId, isApproved);
+    public void approveDesign(Long designId, boolean isApproved, LocalDateTime dateTime, User user) {
+        designRepository.approveDesign(designId, isApproved, dateTime, user);
     }
 
     public List<Design> getAllDesigns() {
@@ -35,6 +35,10 @@ public class DesignService {
 
     public List<Design> getDesignsForWave(Long waveId) {
         return designRepository.findByWaveId(waveId);
+    }
+
+    public List<Design> search(String query) {
+        return designRepository.findByTitleContaining(query);
     }
 
     public Design getDesignById(Long id) {

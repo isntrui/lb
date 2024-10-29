@@ -12,6 +12,8 @@ import ru.isntrui.lb.services.DesignService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
+import java.time.LocalDateTime;
+
 @RestController
 @Tag(name = "Design")
 @RequestMapping("/api/design/")
@@ -52,12 +54,12 @@ public class DesignController {
 
     @Operation(summary = "Approve design")
     @PutMapping("{id}/approve")
-    public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Design to approve") Long id) {
+    public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Design to approve") Long id, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
         if (!(userService.getCurrentUser().getRole() == Role.ADMIN || userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD)) {
             return ResponseEntity.status(403).build();
         }
         if (designService.getDesignById(id) == null) return ResponseEntity.notFound().build();
-        designService.approveDesign(id, true);
+        designService.approveDesign(id, approve, LocalDateTime.now(), userService.getCurrentUser());
         return ResponseEntity.ok().build();
     }
 
@@ -67,7 +69,12 @@ public class DesignController {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsForWave(waveId));
     }
-
+    @Operation(summary = "Search")
+    @GetMapping("search")
+    public ResponseEntity<?> search(@RequestParam @Parameter(description = "Search query") String query) {
+        if (isPermitted()) return ResponseEntity.status(403).build();
+        return ResponseEntity.ok(designService.search(query));
+    }
     @Operation(summary = "Get design by id")
     @GetMapping("{id}")
     public ResponseEntity<?> getDesign(@PathVariable @Parameter(description = "DesignID to get") Long id) {
@@ -77,21 +84,11 @@ public class DesignController {
         return ResponseEntity.ok(design);
     }
 
-    @Operation(summary = "Disapprove design")
-    @PutMapping("{id}/disapprove")
-    public ResponseEntity<Void> disapprove(@PathVariable @Parameter(description = "Design to disapprove") Long id) {
-        if (isPermitted()) return ResponseEntity.status(403).build();
-        if (!(userService.getCurrentUser().getRole() == Role.ADMIN || userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD)) {
-            return ResponseEntity.status(403).build();
-        }
-        if (designService.getDesignById(id) == null) return ResponseEntity.notFound().build();
-        designService.approveDesign(id, false);
-        return ResponseEntity.ok().build();
-    }
 
     @Operation(summary = "Update design")
     @PutMapping("{id}/update")
     public ResponseEntity<Void> update(@PathVariable @Parameter(description = "DesignID to update") Long id, @RequestBody @Parameter(description = "New design's obj") Design design) {
+        if (isPermitted()) return ResponseEntity.status(403).build();
         if (designService.getDesignById(id) == null) return ResponseEntity.notFound().build();
         design.setId(id);
         designService.createDesign(design);
@@ -101,6 +98,7 @@ public class DesignController {
     @Operation(summary = "Get my designs")
     @GetMapping("my")
     public ResponseEntity<?> getMy() {
+        if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsByUser(userService.getCurrentUser()));
     }
 }

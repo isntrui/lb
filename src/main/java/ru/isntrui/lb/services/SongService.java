@@ -7,6 +7,7 @@ import ru.isntrui.lb.models.Song;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.SongRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -15,7 +16,7 @@ public class SongService {
     @Autowired
     private SongRepository songRepository;
     @Transactional
-    public void approveSong(Long songId, boolean isApproved) {
+    public void approveSong(Long songId, boolean isApproved, LocalDateTime dateTime, User user) {
         songRepository.approveSong(songId, isApproved);
     }
 
@@ -27,7 +28,9 @@ public class SongService {
     public void deleteSong(Long songId) {
         songRepository.deleteById(songId);
     }
-
+    public List<Song> search(String title) {
+        return songRepository.findByTitleContaining(title);
+    }
     public Song createSong(Song song) {
         return songRepository.save(song);
     }

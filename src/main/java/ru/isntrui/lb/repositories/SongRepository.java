@@ -19,6 +19,7 @@ public interface SongRepository extends JpaRepository<Song, Long> {
     @Query("select s from Song s")
     @Transactional
     List<Song> getAllSongs();
+    List<Song> findByTitleContaining(String title);
     List<Song> findByWaveId(Long waveId);
     List<Song> getAllByMadeBy(User user);
 

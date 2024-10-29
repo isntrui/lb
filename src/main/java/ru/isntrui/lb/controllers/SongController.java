@@ -12,6 +12,8 @@ import ru.isntrui.lb.services.SongService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
+import java.time.LocalDateTime;
+
 @RestController
 @Tag(name = "Song")
 @RequestMapping("/api/song/")
@@ -52,12 +54,12 @@ public class SongController {
 
     @Operation(summary = "Approve song")
     @PutMapping("{id}/approve")
-    public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Song to approve") Long id) {
+    public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Song to approve") Long id, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
         if (!(us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.HEAD)) {
             return ResponseEntity.status(403).build();
         }
         if (songService.getSongById(id) == null) return ResponseEntity.notFound().build();
-        songService.approveSong(id, true);
+        songService.approveSong(id, approve, LocalDateTime.now(), us.getCurrentUser());
         return ResponseEntity.ok().build();
     }
 
@@ -77,17 +79,6 @@ public class SongController {
         return ResponseEntity.ok(song);
     }
 
-    @Operation(summary = "Disapprove song")
-    @PutMapping("{id}/disapprove")
-    public ResponseEntity<Void> disapprove(@PathVariable @Parameter(description = "Song to disapprove") Long id) {
-        if (!(us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.HEAD)) {
-            return ResponseEntity.status(403).build();
-        }
-        if (songService.getSongById(id) == null) return ResponseEntity.notFound().build();
-        songService.approveSong(id, false);
-        return ResponseEntity.ok().build();
-    }
-
     @Operation(summary = "Update song")
     @PutMapping("{id}/update")
     public ResponseEntity<Void> update(@PathVariable @Parameter(description = "SongID to update") Long id, @RequestBody @Parameter(description = "New song's obj") Song song) {
@@ -102,5 +93,12 @@ public class SongController {
     public ResponseEntity<?> getMy() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(songService.getSongsByUser(us.getCurrentUser()));
+    }
+
+    @Operation(summary = "Search")
+    @GetMapping("search")
+    public ResponseEntity<?> search(@RequestParam @Parameter(description = "Search query") String query) {
+        if (isPermitted()) return ResponseEntity.status(403).build();
+        return ResponseEntity.ok(songService.search(query));
     }
 }
