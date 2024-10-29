@@ -81,7 +81,7 @@ public class AuthenticationService {
         } catch (UserNotFoundException ex) {
             throw new UserNotFoundException("Пользователь не найден");
         }
-        if (!passwordEncoder.matches(cp.oldPassword(), user.getPassword())) {
+        if (!passwordEncoder.encode(cp.oldPassword()).equals(user.getPassword())) {
             throw new RuntimeException("Неверный пароль");
         }
         user.setPassword(passwordEncoder.encode(cp.password()));

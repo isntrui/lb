@@ -16,14 +16,14 @@ import ru.isntrui.lb.queries.SignUpRequest;
 import ru.isntrui.lb.services.AuthenticationService;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/auth/")
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService authenticationService;
 
     @Operation(summary = "Register user")
-    @PostMapping("/sign-up")
+    @PostMapping("sign-up")
     public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
         try {
             return ResponseEntity.ok().body(authenticationService.signUp(request));
@@ -33,7 +33,7 @@ public class AuthController {
     }
 
     @Operation(summary = "Auth user")
-    @PostMapping("/sign-in")
+    @PostMapping("sign-in")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
         try {
             return ResponseEntity.ok().body(authenticationService.signIn(request));
@@ -48,7 +48,7 @@ public class AuthController {
             authenticationService.changePassword(request);
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
-        } catch (BadRequestException ex) {
+        } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();

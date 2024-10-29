@@ -1,5 +1,6 @@
 package ru.isntrui.lb.models;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,13 +29,14 @@ public class Song {
 
     @CreationTimestamp
     private LocalDateTime createdOn;
-
     private boolean isApproved = false;
 
     @ManyToOne
     private Wave wave;
 
     @ManyToOne
+    @Nullable
     private User approvedBy;
+    @Nullable
     private Date approvedOn;
 }

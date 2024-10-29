@@ -19,6 +19,10 @@ public class SongService {
         songRepository.approveSong(songId, isApproved);
     }
 
+    public List<Song> getAllSongs() {
+        return songRepository.getAllSongs();
+    }
+
     @Transactional
     public void deleteSong(Long songId) {
         songRepository.deleteById(songId);
