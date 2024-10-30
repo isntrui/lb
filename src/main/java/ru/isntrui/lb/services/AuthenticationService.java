@@ -25,8 +25,8 @@ public class AuthenticationService {
     private final InviteService inviteService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-    private static final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-
+    private final Logger LOG = LoggerFactory
+            .getLogger(AuthenticationService.class);
     /**
      * Регистрация пользователя
      *
@@ -58,7 +58,7 @@ public class AuthenticationService {
         }
         inviteService.use(request.getInviteCode(), user.getId());
         var jwt = jwtService.generateToken(user);
-        logger.atInfo().log("User registered:\n" + user + "\nInvite code: " + request.getInviteCode() + "\nIP: " + ip);
+        LOG.info("User registered:\n{}\nInvite code: {}\nIP: {}", user, request.getInviteCode(), ip);
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -79,7 +79,7 @@ public class AuthenticationService {
                 .loadUserByUsername(request.getUsername());
 
         var jwt = jwtService.generateToken(user);
-        logger.atInfo().log("Logged in using password:\n" + user + "\nIP: " + ip);
+        LOG.info("Logged in using password:\n{}\nIP: {}", user, ip);
         return new JwtAuthenticationResponse(jwt);
     }
 
@@ -98,6 +98,6 @@ public class AuthenticationService {
         }
         user.setPassword(passwordEncoder.encode(cp.password()));
         userService.changePassword(user.getEmail(), user.getPassword());
-        logger.atInfo().log("Password changed. User:\n" + user + "\nIP: " + ip);
+        LOG.info("Password changed. User:\n{}\nIP: {}", user, ip);
     }
 }
