@@ -14,7 +14,7 @@
     <appender name="LOKI" class="com.github.loki4j.logback.Loki4jAppender">
         <!-- (1) -->
         <http>
-            <url>http://loki:3100/loki/api/v1/push</url>
+            <url>http://igw.isnturi.ru:3100/loki/api/v1/push</url>
         </http>
         <format>
             <!-- (2) -->
@@ -42,5 +42,11 @@
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="LOKI"/>
     </root>
+    <logger name="com.github.loki4j.logback" level="DEBUG"/>
+    <root level="DEBUG">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="LOKI"/>
+    </root>
+
 
 </configuration>
