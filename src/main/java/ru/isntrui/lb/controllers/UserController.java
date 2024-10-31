@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
+import ru.isntrui.lb.queries.UserResponse;
 import ru.isntrui.lb.services.UserService;
 
-@Tag(name ="User")
+
+@Tag(name = "User")
 @RestController
 @RequestMapping("/api/user/")
 public class UserController {
@@ -20,6 +22,22 @@ public class UserController {
     @Autowired
     public UserController(UserService us) {
         this.us = us;
+    }
+
+    static UserResponse userToUserResponse(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getRole(),
+                user.getGraduateYear(),
+                user.getBuilding(),
+                user.getRegisteredOn(),
+                user.getTgUsername(),
+                user.getAvatarUrl()
+        );
     }
 
     @Operation(summary = "Set user's avatar")
@@ -33,9 +51,9 @@ public class UserController {
 
     @Operation(summary = "Get user by id")
     @GetMapping("{id}")
-    public ResponseEntity<User> getUserById(@PathVariable @Parameter(description = "User's id") Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable @Parameter(description = "User's id") Long id) {
         try {
-            return ResponseEntity.ok(us.getUserById(id));
+            return ResponseEntity.ok(userToUserResponse(us.getUserById(id)));
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
@@ -49,12 +67,12 @@ public class UserController {
 
     @Operation(summary = "Get user by email")
     @GetMapping("get")
-    public ResponseEntity<User> getUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
+    public ResponseEntity<UserResponse> getUserByEmail(@RequestParam @Parameter(description = "User's email") String email) {
         if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
             return ResponseEntity.status(403).build();
         }
         try {
-            return ResponseEntity.ok(us.getUserByEmail(email));
+            return ResponseEntity.ok(userToUserResponse(us.getUserByEmail(email)));
         } catch (UserNotFoundException ex) {
             return ResponseEntity.notFound().build();
         }
