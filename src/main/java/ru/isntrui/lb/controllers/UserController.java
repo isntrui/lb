@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @Operation(summary = "Set user's avatar")
-    @PutMapping("/setAvatar")
+    @PutMapping("setAvatar")
     public ResponseEntity<Void> setAvatar(
             @RequestParam @Parameter(description = "Avatar's url") String url
     ) {
