@@ -40,9 +40,9 @@ public class AuthController {
         try {
             userService.getByUsername(username);
         } catch (Exception e) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
 
 
@@ -52,9 +52,9 @@ public class AuthController {
         try {
             userService.getUserByEmail(email);
         } catch (Exception e) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.ok().build();
     }
     @Operation(summary = "Auth user")
     @PostMapping("sign-in")
