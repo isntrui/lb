@@ -33,7 +33,6 @@ public class DesignController {
     private boolean isPermitted() {
         return userService.getCurrentUser().getRole() != Role.ADMIN && userService.getCurrentUser().getRole() != Role.COORDINATOR && userService.getCurrentUser().getRole() != Role.HEAD && userService.getCurrentUser().getRole() != Role.DESIGNER;
     }
-
     @Operation(summary = "Create design")
     @PostMapping("create")
     public ResponseEntity<Void> create(@RequestBody @Parameter(description = "New design") Design design) {

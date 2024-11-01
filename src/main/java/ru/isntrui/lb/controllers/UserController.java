@@ -78,6 +78,30 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Is username taken?")
+    @GetMapping("check/username")
+    public ResponseEntity<Void> isUNameTaken(@RequestParam String username) {
+        try {
+            us.getByUsername(username);
+        } catch (Exception e) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
+    @Operation(summary = "Is email taken?")
+    @GetMapping("check/email")
+    public ResponseEntity<Void> getEmailTaken(@RequestParam String email) {
+        try {
+            us.getUserByEmail(email);
+        } catch (Exception e) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
     @Operation(summary = "Change user's role", description = "Available only for admins")
     @PutMapping("{id}/changeRole")
     public ResponseEntity<Void> changeRoleByEmail(

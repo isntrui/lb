@@ -122,6 +122,7 @@ public class UserService {
 
     }
 
+
     public void setAvatar(Long id, String url) {
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
         user.setAvatarUrl(url);
