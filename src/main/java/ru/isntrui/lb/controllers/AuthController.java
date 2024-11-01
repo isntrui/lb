@@ -14,6 +14,7 @@ import ru.isntrui.lb.queries.JwtAuthenticationResponse;
 import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
 import ru.isntrui.lb.services.AuthenticationService;
+import ru.isntrui.lb.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -21,6 +22,7 @@ import ru.isntrui.lb.services.AuthenticationService;
 @Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
@@ -32,6 +34,28 @@ public class AuthController {
         }
     }
 
+    @Operation(summary = "Is username taken?")
+    @GetMapping("check/username")
+    public ResponseEntity<Void> isUNameTaken(@RequestParam String username) {
+        try {
+            userService.getByUsername(username);
+        } catch (Exception e) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
+    @Operation(summary = "Is email taken?")
+    @GetMapping("check/email")
+    public ResponseEntity<Void> isEmailTaken(@RequestParam String email) {
+        try {
+            userService.getUserByEmail(email);
+        } catch (Exception e) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.badRequest().build();
+    }
     @Operation(summary = "Auth user")
     @PostMapping("sign-in")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request, HttpServletRequest req) {

@@ -43,7 +43,6 @@ public class SecurityConfiguration {
                 }))
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/song/**", "/api/design/**", "/api/wave/**").authenticated()
-                        .requestMatchers("/api/user/check/**").permitAll()
                         .anyRequest().permitAll())
 
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
