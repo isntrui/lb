@@ -16,23 +16,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
+
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
+        uses: gradle/actions/setup-gradle@v3
+
       - name: Build with Gradle Wrapper
         run: ./gradlew build jacocoTestReport
-  
-      - name: Generate and submit dependency graph
-        uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@v4
 
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -46,7 +45,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
@@ -70,10 +69,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
+      - uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.PRIVATE_KEY }}
 
@@ -88,17 +87,21 @@ jobs:
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
             set -e
+          
             export DBUSER=${{ secrets.DBUSER }}
             export DBPASS=${{ secrets.DBPASS }}
             export SIGNING_KEY=${{ secrets.SIGNING_KEY }}
             export DBNAME=jdbc:postgresql://postgres:5432/lbdb
-            
+          
             cd igw/lb
+          
             docker compose down || true
+          
             docker system prune -f || true
+          
             docker pull ghcr.io/${{ github.repository }}:latest || true
-            
+          
             docker compose up -d --build
-            
+          
             echo "Deployment completed successfully."
           EOF
