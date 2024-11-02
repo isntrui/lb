@@ -30,7 +30,13 @@ public class AuthController {
         try {
             return ResponseEntity.ok().body(authenticationService.signUp(request, req.getRemoteAddr()));
         } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
+            if (ex.getMessage().equals("Приглашение не найдено")) {
+                return ResponseEntity.status(404).build();
+            } else if (ex.getMessage().equals("Email не совпадает с приглашением")) {
+                return ResponseEntity.status(401).build();
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
         }
     }
 
