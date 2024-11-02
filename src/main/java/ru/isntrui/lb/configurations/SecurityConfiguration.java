@@ -42,8 +42,9 @@ public class SecurityConfiguration {
                     return corsConfiguration;
                 }))
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/song/**", "/api/design/**", "/api/wave/**").authenticated()
                         .anyRequest().permitAll()
-                        .requestMatchers("/api/user/**", "/api/invite/**", "api/task/**", "/api/aws/**", "/api/text/**", "/api/song/**", "/api/design/**", "/api/wave/**").authenticated())
+                )
                 .sessionManagement(manager -> manager.sessionCreationPolicy(STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
