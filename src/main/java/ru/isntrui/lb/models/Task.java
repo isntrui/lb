@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(of = "id")
 public class Task {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "Task's id", example = "2")
     private Long id;
 

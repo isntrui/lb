@@ -18,7 +18,7 @@ import java.util.Set;
 @Table(name = "waves")
 public class Wave {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
