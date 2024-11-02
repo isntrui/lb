@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.exceptions.user.UserNotFoundException;
@@ -18,11 +18,16 @@ import ru.isntrui.lb.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth/")
-@RequiredArgsConstructor
 @Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
+
+    @Autowired
+    public AuthController(AuthenticationService authenticationService, UserService userService) {
+        this.authenticationService = authenticationService;
+        this.userService = userService;
+    }
 
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
@@ -62,6 +67,7 @@ public class AuthController {
         }
         return ResponseEntity.ok().build();
     }
+
     @Operation(summary = "Auth user")
     @PostMapping("sign-in")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request, HttpServletRequest req) {
@@ -69,7 +75,8 @@ public class AuthController {
             return ResponseEntity.ok().body(authenticationService.signIn(request, req.getRemoteAddr()));
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
-        }    }
+        }
+    }
 
     @Operation(summary = "Change password")
     @PutMapping("changePassword")
