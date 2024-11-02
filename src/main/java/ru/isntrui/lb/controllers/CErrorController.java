@@ -1,4 +1,4 @@
-package ru.isntrui.lb.controllers;
+/*package ru.isntrui.lb.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,3 +41,4 @@ public class CErrorController implements org.springframework.boot.web.servlet.er
                 .body(htmlResponse);
     }
 }
+*/
