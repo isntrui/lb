@@ -34,11 +34,14 @@ public class AuthController {
     @Operation(summary = "Auth user")
     @PostMapping("sign-in")
     public ResponseEntity<JwtAuthenticationResponse> signIn(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignInRequest request) {
+        System.out.println(request.getUsername() + " " + request.getPassword());
         try {
             return ResponseEntity.ok().body(authenticationService.signIn(request));
         } catch (Exception ex) {
+            ex.printStackTrace();
             return ResponseEntity.badRequest().build();
-        }    }
+        }
+    }
 
     @Operation(summary = "Change password")
     @PutMapping("changePassword")

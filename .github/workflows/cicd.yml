@@ -96,7 +96,7 @@ jobs:
             cd igw/lb
             docker compose down || true
             docker system prune -f || true
-            docker pull ghcr.io/${{ github.repository }}:latest || true
+            git pull || true
             
             docker compose up -d --build
             
