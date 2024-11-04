@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
+import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.TaskService;
 import ru.isntrui.lb.services.UserService;
 
@@ -48,7 +49,13 @@ public class TaskController {
         if (task.getTaskStatus() == null) {
             task.setTaskStatus(TaskStatus.TODO);
         }
-
+        if (task.getTakenBy() != null) {
+            User user = userService.getUserById(task.getTakenBy().getId());
+            if (user != null) {
+                user.setRole(Role.DESIGNER); // or any appropriate role
+                task.setTakenBy(user);
+            }
+        }
         taskService.create(task);
         return ResponseEntity.ok(task);
     }
