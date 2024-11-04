@@ -19,7 +19,6 @@ import ru.isntrui.lb.services.TextService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,7 +63,7 @@ public class WaveController {
     public ResponseEntity<String> createWave(@RequestBody WaveRequest waveR) {
         Wave wave;
         try {
-            wave = new Wave(waveR.title(), Date.valueOf(waveR.starts_on()), Date.valueOf(waveR.ends_on()), waveR.status());
+            wave = new Wave(waveR.title(), waveR.starts_on(), waveR.ends_on(), waveR.status());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
@@ -95,8 +94,8 @@ public class WaveController {
         }
         Wave wave = waveOpt.get();
         wave.setTitle(waveR.title() == null ? wave.getTitle() : waveR.title());
-        wave.setStartsOn(Date.valueOf(waveR.starts_on() == null ? wave.getStartsOn().toString() : waveR.starts_on()));
-        wave.setEndsOn(Date.valueOf(waveR.ends_on() == null ? wave.getEndsOn().toString() : waveR.ends_on()));
+        wave.setStartsOn(waveR.starts_on() == null ? wave.getStartsOn() : waveR.starts_on());
+        wave.setEndsOn(waveR.ends_on() == null ? wave.getEndsOn() : waveR.ends_on());
         wave.setStatus(waveR.status() == null ? wave.getStatus() : waveR.status());
         waveService.updateWave(wave);
         return ResponseEntity.ok().build();

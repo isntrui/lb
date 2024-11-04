@@ -9,7 +9,6 @@ import ru.isntrui.lb.enums.WaveStatus;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -22,8 +21,8 @@ public class Wave {
     private Long id;
 
     private String title;
-    private Date startsOn;
-    private Date endsOn;
+    private LocalDate startsOn;
+    private LocalDate endsOn;
 
     @Enumerated(EnumType.STRING)
     private WaveStatus status;
@@ -33,9 +32,9 @@ public class Wave {
 
     @CreationTimestamp
     @Column(updatable = false)
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
-    public Wave(String title, Date s, Date s1, WaveStatus status) {
+    public Wave(String title, LocalDate s, LocalDate s1, WaveStatus status) {
         this.title = title;
         this.status = status;
         this.startsOn = s;
@@ -44,8 +43,8 @@ public class Wave {
 
     public Wave() {
         title = "null";
-        startsOn = Date.valueOf(LocalDate.of(2024, 1, 1));
-        endsOn = Date.valueOf(LocalDate.of(2024, 1, 2));
+        startsOn = Date.valueOf(LocalDate.of(2024, 1, 1)).toLocalDate();
+        endsOn = Date.valueOf(LocalDate.of(2024, 1, 2)).toLocalDate();
         status = WaveStatus.PLANNED;
     }
 }

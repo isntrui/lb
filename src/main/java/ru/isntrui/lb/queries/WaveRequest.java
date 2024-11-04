@@ -2,6 +2,8 @@ package ru.isntrui.lb.queries;
 
 import ru.isntrui.lb.enums.WaveStatus;
 
-public record WaveRequest(String title, String starts_on, String ends_on, WaveStatus status) {
+import java.time.LocalDate;
+
+public record WaveRequest(String title, LocalDate starts_on, LocalDate ends_on, WaveStatus status) {
 
 }
