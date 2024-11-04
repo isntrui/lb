@@ -116,9 +116,9 @@ services:
     user: "root"
   cdn:
     build:
-      context: ../lb_cdn  # Указывает на директорию с Dockerfile
+      context: ../lb_cdn
     ports:
-      - "1488:1488"
+      - "1401:1401"
     environment:
       - NODE_ENV=production
 

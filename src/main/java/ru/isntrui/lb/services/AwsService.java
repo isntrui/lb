@@ -47,7 +47,7 @@ public class AwsService {
     }
 
     public String getFileUrl(String bucketName, String fileName) {
-        return String.format("https://storage.yandexcloud.net/%s/%s", bucketName, fileName);
+        return String.format("http://igw.isntrui.ru:1401/res/%s", fileName);
     }
 
     private final static String REGION = "ru-central1";

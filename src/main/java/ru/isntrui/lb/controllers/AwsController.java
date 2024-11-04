@@ -15,8 +15,6 @@ import ru.isntrui.lb.services.UserService;
 
 import java.io.InputStream;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/api/aws/")
@@ -39,14 +37,12 @@ public class AwsController {
         try {
             n = type.toString() + "_" + Objects.requireNonNull(file.getOriginalFilename()).hashCode() + "_" + us.getCurrentUser().getId() + "-" + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss");
         } catch (Exception e) {
-            Logger.getLogger("AWS").log(Level.SEVERE, "Error while getting current user", e);
             return ResponseEntity.badRequest().build();
         }
         try {
             InputStream is = file.getInputStream();
             res = aws.uploadFile(is, n, FilenameUtils.getExtension(file.getOriginalFilename()));
         } catch (Exception e) {
-            Logger.getLogger("AWS").log(Level.SEVERE, "Error while getting current user", e);
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(res);
