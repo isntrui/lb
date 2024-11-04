@@ -12,6 +12,7 @@ import ru.isntrui.lb.models.Wave;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WaveRepository extends JpaRepository<Wave, Long> {
@@ -25,4 +26,7 @@ public interface WaveRepository extends JpaRepository<Wave, Long> {
     @Modifying
     @Query("UPDATE Wave w SET w.status = :status WHERE w.id = :id")
     void updateStatus(Long id, WaveStatus status);
+
+    @Query("SELECT w FROM Wave w WHERE w.startsOn <= :today AND w.endsOn >= :today")
+    Optional<Wave> findCurrentWave(@Param("today") LocalDate today);
 }

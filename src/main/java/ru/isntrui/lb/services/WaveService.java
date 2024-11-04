@@ -8,6 +8,7 @@ import ru.isntrui.lb.enums.WaveStatus;
 import ru.isntrui.lb.models.Wave;
 import ru.isntrui.lb.repositories.WaveRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +54,10 @@ public class WaveService {
 
     public List<Wave> getOverlappingWaves(Wave wave) {
         return waveRepository.findOverlappingWaves(wave.getStartsOn().toLocalDate(), wave.getEndsOn().toLocalDate());
+    }
+
+    public Optional<Wave> getCurrentWave() {
+        LocalDate today = LocalDate.now();
+        return waveRepository.findCurrentWave(today);
     }
 }

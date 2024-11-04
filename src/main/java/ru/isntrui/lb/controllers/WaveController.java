@@ -129,4 +129,16 @@ public class WaveController {
         waveService.deleteWave(id);
         return ResponseEntity.ok().build();
     }
+
+    @Operation(summary = "Get current wave")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Current wave found"),
+            @ApiResponse(responseCode = "404", description = "No current wave found")
+    })
+    @GetMapping("current")
+    public ResponseEntity<Wave> getCurrentWave() {
+        Optional<Wave> currentWave = waveService.getCurrentWave();
+        return currentWave.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }

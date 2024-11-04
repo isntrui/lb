@@ -9,6 +9,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import ru.isntrui.lb.enums.TaskStatus;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -28,7 +29,7 @@ public class Task {
     private String description;
 
     @Schema(description = "Task's deadline", example = "2021-12-32")
-    private Date deadline;
+    private LocalDate deadline;
 
     @Schema(description = "Task's created date", example = "2021-12-31")
     @CreationTimestamp
