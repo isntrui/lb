@@ -52,7 +52,6 @@ public class TaskController {
         if (task.getTakenBy() != null) {
             User user = userService.getUserById(task.getTakenBy().getId());
             if (user != null) {
-                user.setRole(Role.DESIGNER); // or any appropriate role
                 task.setTakenBy(user);
             }
         }
