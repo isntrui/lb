@@ -11,6 +11,7 @@ import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.repositories.UserRepository;
 
 import java.util.EnumSet;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -79,6 +80,9 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public List<User> getAllByRole(Role role) {
+        return userRepository.getAllByRole(role);
+    }
 
     public User getUserByEmail(String email) throws UserNotFoundException{
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));

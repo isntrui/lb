@@ -11,6 +11,8 @@ import ru.isntrui.lb.exceptions.user.UserNotFoundException;
 import ru.isntrui.lb.models.User;
 import ru.isntrui.lb.services.UserService;
 
+import java.util.List;
+
 @Tag(name ="User")
 @RestController
 @RequestMapping("/api/user/")
@@ -119,5 +121,14 @@ public class UserController {
 
         us.remove(email);
         return ResponseEntity.ok().build();
+    }
+
+    @Operation(summary = "Get all users by role", description = "Available only for admins")
+    @GetMapping("getAllByRole")
+    public ResponseEntity<List<User>> getAllByRole(@RequestParam @Parameter(description = "Role") Role role) {
+        if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(us.getAllByRole(role));
     }
 }
