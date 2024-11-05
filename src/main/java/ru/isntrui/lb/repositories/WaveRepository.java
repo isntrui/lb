@@ -22,6 +22,8 @@ public interface WaveRepository extends JpaRepository<Wave, Long> {
     @Query("SELECT w FROM Wave w WHERE (w.startsOn <= :endsOn AND w.endsOn >= :startsOn)")
     List<Wave> findOverlappingWaves(@Param("startsOn") LocalDate startsOn, @Param("endsOn") LocalDate endsOn);
 
+    List<Wave> findAllByStatusNot(WaveStatus status);
+
     @Transactional
     @Modifying
     @Query("UPDATE Wave w SET w.status = :status WHERE w.id = :id")

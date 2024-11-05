@@ -140,4 +140,10 @@ public class WaveController {
         return currentWave.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @Operation(summary = "Get all not finished waves")
+    @GetMapping("allActual")
+    public ResponseEntity<List<Wave>> getNotFinishedWaves() {
+        return ResponseEntity.ok(waveService.getNotFinishedWaves());
+    }
 }

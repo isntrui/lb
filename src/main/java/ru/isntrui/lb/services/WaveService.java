@@ -52,6 +52,10 @@ public class WaveService {
         return waveRepository.findAllWaves(pb);
     }
 
+    public List<Wave> getNotFinishedWaves() {
+        return waveRepository.findAllByStatusNot(WaveStatus.FINISHED);
+    }
+
     public List<Wave> getOverlappingWaves(Wave wave) {
         return waveRepository.findOverlappingWaves(wave.getStartsOn(), wave.getEndsOn());
     }
