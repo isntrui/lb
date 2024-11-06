@@ -59,8 +59,8 @@ public class SongController {
     }
 
     @Operation(summary = "Approve song")
-    @PutMapping("/approve")
-    public ResponseEntity<Void> approve(@RequestParam @Parameter(description = "Song to approve") Long id, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
+    @PutMapping("{id}/approve")
+    public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Song to approve") Long id, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
         if (!(us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.HEAD)) {
             return ResponseEntity.status(403).build();
         }
@@ -86,8 +86,8 @@ public class SongController {
     }
 
     @Operation(summary = "Update song")
-    @PutMapping("/update")
-    public ResponseEntity<Void> update(@RequestParam @Parameter(description = "SongID to update") Long id, @RequestBody @Parameter(description = "New song's obj") Song song) {
+    @PutMapping("{id}/update")
+    public ResponseEntity<Void> update(@PathVariable @Parameter(description = "SongID to update") Long id, @RequestBody @Parameter(description = "New song's obj") Song song) {
         if (songService.getSongById(id) == null) return ResponseEntity.notFound().build();
         if (isPermitted()) return ResponseEntity.status(403).build();
         song.setId(id);

@@ -22,7 +22,7 @@ public class CErrorController implements org.springframework.boot.web.servlet.er
         this.errorAttributes = errorAttributes;
     }
 
-    @RequestMapping(path = "/error", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(path = "/error", method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
     public ResponseEntity<String> handleError(HttpServletRequest request) {
         Map<String, Object> errorDetails = errorAttributes.getErrorAttributes(
                 new ServletWebRequest(request),
