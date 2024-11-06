@@ -7,7 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import ru.isntrui.lb.enums.FileType;
 import ru.isntrui.lb.services.AwsService;
@@ -31,20 +34,17 @@ public class AwsController {
 
     @Operation(summary = "Upload file to AWS")
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestPart @Parameter(description = "File with content to upload") MultipartFile file, @RequestParam @Parameter(description = "Type of content") FileType type) {
+    public ResponseEntity<String> upload(@RequestParam @Parameter(description = "File with content to upload") MultipartFile file, @RequestParam @Parameter(description = "Type of content") FileType type) {
         String n;
         String res;
-        try {
-            n = type.toString() + "_" + Objects.requireNonNull(file.getOriginalFilename()).hashCode() + "_" + us.getCurrentUser().getId() + "-" + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss");
-        } catch (Exception e) {
-            System.out.println("Error 1: " + e.getMessage());
+        if (file.isEmpty() || type == null) {
             return ResponseEntity.badRequest().build();
         }
         try {
+            n = type + "_" + Objects.requireNonNull(file.getOriginalFilename()).hashCode() + "_" + us.getCurrentUser().getId() + "-" + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss");
             InputStream is = file.getInputStream();
             res = aws.uploadFile(is, n, FilenameUtils.getExtension(file.getOriginalFilename()));
         } catch (Exception e) {
-            System.out.println("Error 2: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(res);
