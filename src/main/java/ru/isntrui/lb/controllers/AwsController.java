@@ -1,6 +1,5 @@
 package ru.isntrui.lb.controllers;
 
-import cn.hutool.core.date.DateTime;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.FilenameUtils;
@@ -15,9 +14,7 @@ import ru.isntrui.lb.enums.FileType;
 import ru.isntrui.lb.services.AwsService;
 import ru.isntrui.lb.services.UserService;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/aws/")
@@ -34,14 +31,14 @@ public class AwsController {
 
     @Operation(summary = "Upload file to AWS")
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam FileType type) throws IOException {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam FileType type) {
         String n;
         String res;
-        if (file.isEmpty() || type == null) {
+        if (file.isEmpty() || type == null || file.getOriginalFilename() == null) {
             return ResponseEntity.badRequest().build();
         }
         try {
-            n = type + "_" + Objects.requireNonNull(file.getOriginalFilename()).hashCode() + "_" + us.getCurrentUser().getId() + "-" + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss");
+            n = type + "_" + file.getOriginalFilename().hashCode() + "_" + us.getCurrentUser().getId().toString() + ((Math.random() * Math.random() * 10000) + "");
             InputStream is = file.getInputStream();
             res = aws.uploadFile(is, n, FilenameUtils.getExtension(file.getOriginalFilename()));
         } catch (Exception e) {
