@@ -2,7 +2,6 @@ package ru.isntrui.lb.controllers;
 
 import cn.hutool.core.date.DateTime;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import ru.isntrui.lb.enums.FileType;
 import ru.isntrui.lb.services.AwsService;
 import ru.isntrui.lb.services.UserService;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
@@ -34,7 +34,7 @@ public class AwsController {
 
     @Operation(summary = "Upload file to AWS")
     @PostMapping("/upload")
-    public ResponseEntity<String> upload(@RequestParam @Parameter(description = "File with content to upload") MultipartFile file, @RequestParam @Parameter(description = "Type of content") FileType type) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, @RequestParam FileType type) throws IOException {
         String n;
         String res;
         if (file.isEmpty() || type == null) {
