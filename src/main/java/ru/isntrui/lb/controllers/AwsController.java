@@ -37,12 +37,14 @@ public class AwsController {
         try {
             n = type.toString() + "_" + Objects.requireNonNull(file.getOriginalFilename()).hashCode() + "_" + us.getCurrentUser().getId() + "-" + DateTime.now().toString("yyyy-MM-dd_HH-mm-ss");
         } catch (Exception e) {
+            System.out.println("Error 1: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
         try {
             InputStream is = file.getInputStream();
             res = aws.uploadFile(is, n, FilenameUtils.getExtension(file.getOriginalFilename()));
         } catch (Exception e) {
+            System.out.println("Error 2: " + e.getMessage());
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(res);
