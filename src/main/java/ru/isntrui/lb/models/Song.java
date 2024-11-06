@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,5 +37,5 @@ public class Song {
     @Nullable
     private User approvedBy;
     @Nullable
-    private Date approvedOn;
+    private LocalDateTime approvedOn;
 }

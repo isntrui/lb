@@ -88,10 +88,29 @@ public class SongController {
     @Operation(summary = "Update song")
     @PutMapping("{id}/update")
     public ResponseEntity<Void> update(@PathVariable @Parameter(description = "SongID to update") Long id, @RequestBody @Parameter(description = "New song's obj") Song song) {
-        if (songService.getSongById(id) == null) return ResponseEntity.notFound().build();
-        if (isPermitted()) return ResponseEntity.status(403).build();
-        song.setId(id);
-        songService.createSong(song);
+        if (isPermitted()) {
+            return ResponseEntity.status(403).build();
+        }
+        Song existingSong = songService.getSongById(id);
+        if (existingSong == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (song.getTitle() != null) {
+            existingSong.setTitle(song.getTitle());
+        }
+        if (song.getArtist() != null) {
+            existingSong.setArtist(song.getArtist());
+        }
+        if (song.getDescription() != null) {
+            existingSong.setDescription(song.getDescription());
+        }
+        if (song.getUrl() != null) {
+            existingSong.setUrl(song.getUrl());
+        }
+        if (song.getWave() != null) {
+            existingSong.setWave(song.getWave());
+        }
+        songService.createSong(existingSong);
         return ResponseEntity.ok().build();
     }
     @Operation(summary = "Get my songs")
