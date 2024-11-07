@@ -135,4 +135,8 @@ public class UserService {
         user.setAvatarUrl(url);
         userRepository.save(user);
     }
+
+    public void updateUser(User user) {
+        userRepository.save(user);
+    }
 }

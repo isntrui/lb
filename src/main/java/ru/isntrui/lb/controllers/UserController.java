@@ -140,4 +140,23 @@ public class UserController {
         }
         return ResponseEntity.ok(us.getAll());
     }
+
+    @Operation(summary = "Update user")
+    @PutMapping("/{id}/update")
+    public ResponseEntity<Void> updateUser(@RequestBody User user, @PathVariable Long id) {
+        User currentUser = us.getCurrentUser();
+        User userToUpdate = us.getUserById(id);
+        boolean hasPermission = switch (currentUser.getRole()) {
+            case ADMIN -> true;
+            case HEAD -> userToUpdate.getRole() != Role.ADMIN;
+            case COORDINATOR ->
+                    userToUpdate.getRole() != Role.COORDINATOR && userToUpdate.getRole() != Role.HEAD && userToUpdate.getRole() != Role.ADMIN;
+            default -> false;
+        };
+        if (!hasPermission) {
+            return ResponseEntity.status(403).build();
+        }
+        us.updateUser(user);
+        return ResponseEntity.ok().build();
+    }
 }
