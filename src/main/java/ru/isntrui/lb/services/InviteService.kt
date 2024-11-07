@@ -16,7 +16,9 @@ open class InviteService {
     }
 
     open fun create(email: String, code: String) : Invite {
-        val invite = Invite(email, code)
+        val invite = Invite()
+        invite.code = code
+        invite.email = email
         return inviteRepository.save(invite)
     }
 
