@@ -84,6 +84,10 @@ public class UserService {
         return userRepository.getAllByRole(role);
     }
 
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
     public User getUserByEmail(String email) throws UserNotFoundException{
         return userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
     }

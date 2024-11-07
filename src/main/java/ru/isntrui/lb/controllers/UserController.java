@@ -131,4 +131,13 @@ public class UserController {
         }
         return ResponseEntity.ok(us.getAllByRole(role));
     }
+
+    @Operation(summary = "Get all users")
+    @GetMapping("all")
+    public ResponseEntity<List<User>> getAll() {
+        if (us.getCurrentUser().getRole() != Role.ADMIN && us.getCurrentUser().getRole() != Role.HEAD && us.getCurrentUser().getRole() != Role.COORDINATOR) {
+            return ResponseEntity.status(403).build();
+        }
+        return ResponseEntity.ok(us.getAll());
+    }
 }

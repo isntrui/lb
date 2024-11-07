@@ -38,7 +38,7 @@ public class AwsController {
             return ResponseEntity.badRequest().build();
         }
         try {
-            n = type + "_" + file.getOriginalFilename().hashCode() + "_" + us.getCurrentUser().getId().toString() + ((Math.random() * Math.random() * 10000) + "");
+            n = type + "_" + Math.abs((int) (file.getOriginalFilename().hashCode() / (Math.random() * 10))) + "_" + us.getCurrentUser().getId().toString() + ((int) (Math.random() * Math.random() * 10000) + "");
             InputStream is = file.getInputStream();
             res = aws.uploadFile(is, n, FilenameUtils.getExtension(file.getOriginalFilename()));
         } catch (Exception e) {
