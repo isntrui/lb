@@ -11,7 +11,7 @@ interface InviteRepository : CrudRepository<Invite, Long> {
     @Query("UPDATE Invite i SET i.isUsed = true WHERE i.code = :code")
     @Modifying
     @Transactional
-    fun setUsed(code: String, userId: Long)
+    fun setUsed(code: String)
 
     fun findByCode(code: String): Invite?
 

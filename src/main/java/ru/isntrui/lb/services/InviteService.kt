@@ -36,6 +36,6 @@ open class InviteService {
         if (invite.isUsed) {
             throw IllegalStateException("Invite has already been used")
         }
-        inviteRepository.setUsed(code, userId)
+        inviteRepository.setUsed(code)
     }
 }
