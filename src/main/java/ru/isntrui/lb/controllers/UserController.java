@@ -102,7 +102,12 @@ public class UserController {
         if (us.getUserById(id).getRole() == Role.HEAD && us.getCurrentUser().getRole() != Role.ADMIN) {
             return ResponseEntity.status(403).build();
         }
-        us.remove(id);
+        User user = us.getUserById(id);
+        user.setPassword("$2a$10$yIWLUfX99.I6kdXkgsZgEu8qU.fpkk/o4tiMHr9iy/zCiBCjywT1u");
+        user.setFirstName(user.getFirstName() + " " + user.getLastName());
+        user.setLastName("[DELETED]");
+        user.setEmail(user.hashCode() + "del@deleted.del");
+        us.updateUser(user);
         return ResponseEntity.ok().build();
     }
 
