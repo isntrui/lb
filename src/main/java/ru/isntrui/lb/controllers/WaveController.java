@@ -63,7 +63,7 @@ public class WaveController {
     public ResponseEntity<String> createWave(@RequestBody WaveRequest waveR) {
         Wave wave;
         try {
-            wave = new Wave(waveR.title(), waveR.starts_on(), waveR.ends_on(), waveR.status());
+            wave = new Wave(waveR.title(), waveR.startsOn(), waveR.endsOn(), waveR.status());
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
@@ -72,6 +72,7 @@ public class WaveController {
             return ResponseEntity.status(403).build();
         }
         try {
+            System.out.println(wave.getStartsOn() + " " + wave.getEndsOn());
             waveService.createWave(wave);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
@@ -94,8 +95,8 @@ public class WaveController {
         }
         Wave wave = waveOpt.get();
         wave.setTitle(waveR.title() == null ? wave.getTitle() : waveR.title());
-        wave.setStartsOn(waveR.starts_on() == null ? wave.getStartsOn() : waveR.starts_on());
-        wave.setEndsOn(waveR.ends_on() == null ? wave.getEndsOn() : waveR.ends_on());
+        wave.setStartsOn(waveR.startsOn() == null ? wave.getStartsOn() : waveR.startsOn());
+        wave.setEndsOn(waveR.startsOn() == null ? wave.getEndsOn() : waveR.endsOn());
         wave.setStatus(waveR.status() == null ? wave.getStatus() : waveR.status());
         waveService.updateWave(wave);
         return ResponseEntity.ok().build();
