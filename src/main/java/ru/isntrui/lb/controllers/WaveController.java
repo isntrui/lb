@@ -60,13 +60,7 @@ public class WaveController {
 
 
     @PostMapping("create")
-    public ResponseEntity<String> createWave(@RequestBody WaveRequest waveR) {
-        Wave wave;
-        try {
-            wave = new Wave(waveR.title(), waveR.startsOn(), waveR.endsOn(), waveR.status());
-        } catch (Exception ex) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<String> createWave(@RequestBody Wave wave) {
         Role currentUserRole = userService.getCurrentUser().getRole();
         if (currentUserRole != Role.COORDINATOR && currentUserRole != Role.HEAD && currentUserRole != Role.ADMIN) {
             return ResponseEntity.status(403).build();
