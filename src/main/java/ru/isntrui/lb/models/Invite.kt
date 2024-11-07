@@ -27,9 +27,6 @@ open class Invite(emailC: String, codeC: String) {
     @Column(nullable = false)
     open var isUsed: Boolean = false
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    open var usedBy: User? = null
-
     init {
         email = emailC
         code = codeC
