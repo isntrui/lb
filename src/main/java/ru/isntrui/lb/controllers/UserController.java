@@ -106,6 +106,7 @@ public class UserController {
         user.setPassword("$2a$10$yIWLUfX99.I6kdXkgsZgEu8qU.fpkk/o4tiMHr9iy/zCiBCjywT1u");
         user.setFirstName(user.getFirstName() + " " + user.getLastName());
         user.setLastName("[DELETED]");
+        user.setBuilding("Removed by " + us.getCurrentUser().getId());
         user.setEmail(user.hashCode() + "del@deleted.del");
         us.updateUser(user);
         return ResponseEntity.ok().build();
