@@ -7,15 +7,13 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "invites")
-open class Invite(
+open class Invite {
     @Column(unique = true, nullable = false)
     @Email
-    open var email: String? = null,
+    open var email: String? = null
 
     @Column(nullable = false)
     open var code: String = ""
-) {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open var id: Long? = null
@@ -26,6 +24,4 @@ open class Invite(
 
     @Column(nullable = false)
     open var isUsed: Boolean = false
-
-    constructor() : this(null, "")
 }

@@ -85,7 +85,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5' // or 'io.jsonwebtoken:jjwt-gson:0.11.5' if you prefer Gson    implementation('javax.xml.bind:jaxb-api:2.4.0-b180830.0359')
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation('org.springframework.boot:spring-boot-starter-actuator')
