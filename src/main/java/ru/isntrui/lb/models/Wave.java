@@ -33,14 +33,6 @@ public class Wave {
     @CreationTimestamp
     @Column(updatable = false)
     private LocalDate createdAt;
-
-    public Wave(String title, LocalDate s, LocalDate s1, WaveStatus status) {
-        this.title = title;
-        this.status = status;
-        this.startsOn = s;
-        this.endsOn = s1;
-    }
-
     public Wave() {
         title = "null";
         startsOn = Date.valueOf(LocalDate.of(2024, 1, 1)).toLocalDate();

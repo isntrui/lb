@@ -35,11 +35,10 @@ public class WaveService {
 
     public void createWave(Wave wave) {
         List<Wave> overlappingWaves = waveRepository.findOverlappingWaves(wave.getStartsOn(), wave.getEndsOn());
-
         if (!overlappingWaves.isEmpty()) {
             throw new IllegalArgumentException("Невозможно создать волну: период пересекается с уже существующей волной.");
         }
-
+        System.out.println(wave);
         waveRepository.save(wave);
     }
 

@@ -65,15 +65,12 @@ public class WaveController {
         if (currentUserRole != Role.COORDINATOR && currentUserRole != Role.HEAD && currentUserRole != Role.ADMIN) {
             return ResponseEntity.status(403).build();
         }
+        System.out.println(wave);
         try {
-            System.out.println(wave.getStartsOn() + " " + wave.getEndsOn());
             waveService.createWave(wave);
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
-            List<Wave> w = waveService.getOverlappingWaves(wave);
-            StringBuilder sb = new StringBuilder();
-            w.forEach(s -> sb.append(s.getId()).append("\"").append(s.getTitle()).append("\", "));
-            return ResponseEntity.badRequest().body("Невозможно создать волну: период пересекается с уже существующими волнами: " + sb);
+            return ResponseEntity.badRequest().body("Невозможно создать волну: период пересекается с уже существующими волнами");
         }
     }
 
