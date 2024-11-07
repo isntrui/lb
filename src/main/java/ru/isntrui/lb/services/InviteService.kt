@@ -11,8 +11,8 @@ open class InviteService {
     @Autowired
     private lateinit var inviteRepository: InviteRepository
 
-    open fun getAllInvites(): List<Invite> {
-        return inviteRepository.getAllInvites()
+    open fun getAllInvites(): Iterable<Invite?> {
+        return inviteRepository.findAll()
     }
 
     open fun create(email: String, code: String) : Invite {

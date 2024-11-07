@@ -16,6 +16,4 @@ interface InviteRepository : CrudRepository<Invite, Long> {
     fun findByCode(code: String): Invite?
 
     fun deleteByCode(code: String)
-
-    fun getAllInvites(): List<Invite>
 }

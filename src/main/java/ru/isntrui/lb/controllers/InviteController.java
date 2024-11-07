@@ -14,6 +14,7 @@ import ru.isntrui.lb.queries.InviteQuery;
 import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "Invite")
@@ -57,7 +58,10 @@ public class InviteController {
         if (!(userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.HEAD) || userService.getCurrentUser().getRole().equals(Role.ADMIN))) {
             return ResponseEntity.status(HttpStatusCode.valueOf(403)).build();
         }
-        return ResponseEntity.ok(inviteService.getAllInvites());
+        ArrayList<Invite> invites = new ArrayList<>();
+        Iterable<Invite> all = inviteService.getAllInvites();
+        all.forEach(invites::add);
+        return ResponseEntity.ok(invites);
     }
 
     @DeleteMapping("delete")
