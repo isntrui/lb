@@ -146,4 +146,10 @@ public class WaveController {
     public ResponseEntity<List<Wave>> getNotFinishedWaves() {
         return ResponseEntity.ok(waveService.getNotFinishedWaves());
     }
+
+    @Operation(summary = "Get all waves")
+    @GetMapping("all")
+    public ResponseEntity<List<Wave>> getAllWaves() {
+        return ResponseEntity.ok(waveService.getAllWaves());
+    }
 }

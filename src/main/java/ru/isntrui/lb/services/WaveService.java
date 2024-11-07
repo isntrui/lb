@@ -64,4 +64,8 @@ public class WaveService {
         LocalDate today = LocalDate.now();
         return waveRepository.findCurrentWave(today);
     }
+
+    public List<Wave> getAllWaves() {
+        return waveRepository.findAll();
+    }
 }
