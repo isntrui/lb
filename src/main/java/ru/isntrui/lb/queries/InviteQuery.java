@@ -1,4 +1,5 @@
 package ru.isntrui.lb.queries;
 
 
-public record InviteQuery(String inviteCode, String email){}
+public record InviteQuery(String code, String email) {
+}
