@@ -111,6 +111,7 @@ public class WaveController {
     @DeleteMapping("{id}/delete")
     public ResponseEntity<Void> deleteWave(@PathVariable Long id) {
         Optional<Wave> waveOpt = waveService.getWaveById(id);
+        System.out.println(waveOpt);
         if (waveOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
