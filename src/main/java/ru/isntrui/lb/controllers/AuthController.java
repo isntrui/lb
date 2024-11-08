@@ -13,6 +13,7 @@ import ru.isntrui.lb.queries.JwtAuthenticationResponse;
 import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
 import ru.isntrui.lb.services.AuthenticationService;
+import ru.isntrui.lb.services.UserService;
 
 @RestController
 @RequestMapping("/api/auth/")
@@ -20,6 +21,7 @@ import ru.isntrui.lb.services.AuthenticationService;
 @Tag(name = "Authentication")
 public class AuthController {
     private final AuthenticationService authenticationService;
+    private final UserService userService;
 
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
@@ -54,5 +56,17 @@ public class AuthController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(400).body(e.getMessage());
         }
+    }
+
+    @Operation(summary = "Is email taken?")
+    @GetMapping("check/email")
+    public ResponseEntity<Boolean> isEmailTaken(@RequestParam @Parameter(description = "Email to check") String email) {
+        return ResponseEntity.ok(userService.isEmailTaken(email));
+    }
+
+    @Operation(summary = "Is username taken?")
+    @GetMapping("check/username")
+    public ResponseEntity<Boolean> isUsernameTaken(@RequestParam @Parameter(description = "Email to check") String username) {
+        return ResponseEntity.ok(userService.isUsernameTaken(username));
     }
 }

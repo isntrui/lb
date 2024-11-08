@@ -49,6 +49,13 @@ public class UserService {
         return save(user);
     }
 
+    public boolean isEmailTaken(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean isUsernameTaken(String username) {
+        return userRepository.existsByUsername(username);
+    }
     @Transactional
     public void changeRole(String email, Role role) throws UserNotFoundException{
         validateRole(role);
