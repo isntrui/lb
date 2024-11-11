@@ -8,10 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Text;
-import ru.isntrui.lb.queries.TextRequest;
 import ru.isntrui.lb.services.TextService;
 import ru.isntrui.lb.services.UserService;
-import ru.isntrui.lb.services.WaveService;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -24,26 +22,18 @@ import java.util.logging.Logger;
 public class TextController {
     private final TextService ts;
     private final UserService us;
-    private final WaveService ws;
 
     @Autowired
-    public TextController(TextService ts, UserService us, WaveService ws) {
+    public TextController(TextService ts, UserService us) {
         this.ts = ts;
         this.us = us;
-        this.ws = ws;
     }
 
     @Operation(summary = "Save new text")
     @PostMapping("save")
-    public ResponseEntity<Void> saveText(@RequestBody @Parameter(description = "Text request") TextRequest text) {
+    public ResponseEntity<Void> saveText(@RequestBody @Parameter(description = "Text request") Text text) {
         if (us.getCurrentUser().getRole() == Role.WRITER || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR) {
-            Text t = new Text();
-            t.setMadeBy(us.getCurrentUser());
-            t.setApproved(false);
-            t.setBody(text.getText());
-            t.setTitle(text.getTitle());
-            t.setWave(text.getWave() != null ? text.getWave() : ws.getLastCreatedWave().getFirst());
-            ts.create(t);
+            ts.create(text);
             return ResponseEntity.ok().build();
         }
         return ResponseEntity.status(403).build();

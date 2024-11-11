@@ -28,7 +28,6 @@ open class Text {
     open lateinit var madeBy: User
 
     @Column(nullable = false)
-
     @CreationTimestamp
     open lateinit var madeOn: LocalDateTime
 

@@ -48,7 +48,6 @@ public class AuthController {
 
     @Operation(summary = "Change password")
     @PutMapping("changePassword")
-    @PostMapping("change-password")
     public ResponseEntity<String> changePassword(@Valid @RequestBody ChangePasswordRequest cp) {
         try {
             authenticationService.changePassword(cp);
