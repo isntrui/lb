@@ -158,7 +158,7 @@ public class UserController {
             case COORDINATOR ->
                     userToUpdate.getRole() != Role.COORDINATOR && userToUpdate.getRole() != Role.HEAD && userToUpdate.getRole() != Role.ADMIN;
             default -> false;
-        };
+        } || currentUser.getId().equals(userToUpdate.getId());
         if (!hasPermission) {
             return ResponseEntity.status(403).build();
         }
