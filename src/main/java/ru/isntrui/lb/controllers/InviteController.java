@@ -39,7 +39,7 @@ public class InviteController {
     public ResponseEntity<Void> create(@RequestBody InviteQuery query) {
         if (userService.getCurrentUser().getRole().toString().equals(Role.HEAD.toString()) || userService.getCurrentUser().getRole().equals(Role.COORDINATOR) || userService.getCurrentUser().getRole().equals(Role.ADMIN)) {
             try {
-                inviteService.create(query.email(), query.inviteCode());
+                inviteService.create(query.email(), query.code());
             } catch (RuntimeException ex) {
                 return ResponseEntity.badRequest().build();
             }
