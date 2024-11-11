@@ -37,7 +37,7 @@ public class DesignController {
     @Operation(summary = "Get all designs")
     @GetMapping("/all")
     public ResponseEntity<List<Design>> getAll() {
-        if (isPermitted()) return ResponseEntity.status(403).build();
+        if (!isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getAllDesigns());
     }
 
