@@ -107,6 +107,6 @@ public class DesignController {
 
     private boolean isPermitted() {
         var role = userService.getCurrentUser().getRole();
-        return role.isAdmin() || role == Role.DESIGNER;
+        return role == Role.ADMIN || role == Role.DESIGNER || role == Role.COORDINATOR || role == Role.HEAD;
     }
 }
