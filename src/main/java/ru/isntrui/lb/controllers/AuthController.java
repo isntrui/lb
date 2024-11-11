@@ -13,6 +13,7 @@ import ru.isntrui.lb.queries.JwtAuthenticationResponse;
 import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
 import ru.isntrui.lb.services.AuthenticationService;
+import ru.isntrui.lb.services.InviteService;
 import ru.isntrui.lb.services.UserService;
 
 @RestController
@@ -22,6 +23,7 @@ import ru.isntrui.lb.services.UserService;
 public class AuthController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
+    private final InviteService inviteService;
 
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
@@ -68,5 +70,11 @@ public class AuthController {
     @GetMapping("check/username")
     public ResponseEntity<Boolean> isUsernameTaken(@RequestParam @Parameter(description = "Email to check") String username) {
         return ResponseEntity.ok(userService.isUsernameTaken(username));
+    }
+
+    @Operation(summary = "Is invite code valid?")
+    @GetMapping("check/invite")
+    public ResponseEntity<Boolean> isInviteValid(@RequestParam @Parameter(description = "Invite code to check") String code) {
+        return ResponseEntity.ok(inviteService.findByCode(code) != null);
     }
 }

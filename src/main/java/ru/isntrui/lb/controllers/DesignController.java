@@ -3,7 +3,7 @@ package ru.isntrui.lb.controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
@@ -18,24 +18,15 @@ import java.util.Objects;
 
 @RestController
 @Tag(name = "Design")
-@RequestMapping("/api/design/")
+@RequestMapping("/api/design")
+@RequiredArgsConstructor
 public class DesignController {
     private final DesignService designService;
     private final UserService userService;
     private final WaveService ws;
 
-    @Autowired
-    public DesignController(DesignService designService, UserService userService, WaveService ws) {
-        this.designService = designService;
-        this.userService = userService;
-        this.ws = ws;
-    }
-    private boolean isPermitted() {
-        return userService.getCurrentUser().getRole() != Role.ADMIN && userService.getCurrentUser().getRole() != Role.COORDINATOR && userService.getCurrentUser().getRole() != Role.HEAD && userService.getCurrentUser().getRole() != Role.DESIGNER;
-    }
-
     @Operation(summary = "Create design")
-    @PostMapping("create")
+    @PostMapping("/create")
     public ResponseEntity<Void> create(@RequestBody @Parameter(description = "New design") Design design) {
         design.setCreatedBy(userService.getCurrentUser());
         design.setWave(ws.getLastCreatedWave().getFirst());
@@ -44,14 +35,14 @@ public class DesignController {
     }
 
     @Operation(summary = "Get all designs")
-    @GetMapping("all")
+    @GetMapping("/all")
     public ResponseEntity<List<Design>> getAll() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getAllDesigns());
     }
 
     @Operation(summary = "Delete design")
-    @DeleteMapping("{id}/delete")
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> delete(@PathVariable @Parameter(description = "Design to remove") Long id) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         designService.deleteDesign(id);
@@ -59,7 +50,7 @@ public class DesignController {
     }
 
     @Operation(summary = "Approve design")
-    @PutMapping("{id}/approve")
+    @PutMapping("/{id}/approve")
     public ResponseEntity<Void> approve(@PathVariable @Parameter(description = "Design to approve") Long id, @RequestParam @Parameter(description = "Approve or disapprove") boolean approve) {
         if (!(userService.getCurrentUser().getRole() == Role.ADMIN || userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.HEAD)) {
             return ResponseEntity.status(403).build();
@@ -70,19 +61,21 @@ public class DesignController {
     }
 
     @Operation(summary = "Get designs for wave")
-    @GetMapping("wave")
+    @GetMapping("/wave")
     public ResponseEntity<List<Design>> get(@RequestParam @Parameter(description = "Wave id to get") Long waveId) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsForWave(waveId));
     }
+
     @Operation(summary = "Search")
-    @GetMapping("search")
+    @GetMapping("/search")
     public ResponseEntity<List<Design>> search(@RequestParam @Parameter(description = "Search query") String query) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.search(query));
     }
+
     @Operation(summary = "Get design by id")
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Design> getDesign(@PathVariable @Parameter(description = "DesignID to get") Long id) {
         if (isPermitted()) return ResponseEntity.status(403).build();
         Design design = designService.getDesignById(id);
@@ -92,7 +85,7 @@ public class DesignController {
 
 
     @Operation(summary = "Update design")
-    @PutMapping("{id}/update")
+    @PutMapping("/{id}/update")
     public ResponseEntity<Void> update(@PathVariable @Parameter(description = "DesignID to update") Long id, @RequestBody @Parameter(description = "New design's obj") Design design) {
         if (designService.getDesignById(id) == null) return ResponseEntity.notFound().build();
         if (userService.getCurrentUser().getRole() == Role.HEAD || userService.getCurrentUser().getRole() == Role.COORDINATOR || userService.getCurrentUser().getRole() == Role.ADMIN || Objects.equals(userService.getCurrentUser().getId(), designService.getDesignById(id).getId())) {
@@ -106,9 +99,14 @@ public class DesignController {
     }
 
     @Operation(summary = "Get my designs")
-    @GetMapping("my")
+    @GetMapping("/my")
     public ResponseEntity<List<Design>> getMy() {
         if (isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsByUser(userService.getCurrentUser()));
+    }
+
+    private boolean isPermitted() {
+        var role = userService.getCurrentUser().getRole();
+        return role.isAdmin() || role == Role.DESIGNER;
     }
 }
