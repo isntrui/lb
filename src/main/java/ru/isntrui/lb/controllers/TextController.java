@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.models.Text;
+import ru.isntrui.lb.queries.TextRequest;
 import ru.isntrui.lb.services.TextService;
 import ru.isntrui.lb.services.UserService;
 import ru.isntrui.lb.services.WaveService;
@@ -34,14 +35,14 @@ public class TextController {
 
     @Operation(summary = "Save new text")
     @PostMapping("save")
-    public ResponseEntity<Void> saveText(@RequestParam @Parameter(description = "Title of new text") String title, @RequestParam @Parameter(description = "Body of new text") String text) {
+    public ResponseEntity<Void> saveText(@RequestBody @Parameter(description = "Text request") TextRequest text) {
         if (us.getCurrentUser().getRole() == Role.WRITER || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR) {
             Text t = new Text();
             t.setMadeBy(us.getCurrentUser());
             t.setApproved(false);
-            t.setBody(text);
-            t.setTitle(title);
-            t.setWave(ws.getLastCreatedWave().getFirst());
+            t.setBody(text.getText());
+            t.setTitle(text.getTitle());
+            t.setWave(text.getWave() != null ? text.getWave() : ws.getLastCreatedWave().getFirst());
             ts.create(t);
             return ResponseEntity.ok().build();
         }
