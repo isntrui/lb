@@ -77,7 +77,7 @@ public class TextController {
     @Operation(summary = "Get all texts")
     @GetMapping("getAll")
     public ResponseEntity<Iterable<Text>> getAll() {
-        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN) {
+        if (us.getCurrentUser().getRole() == Role.HEAD || us.getCurrentUser().getRole() == Role.COORDINATOR || us.getCurrentUser().getRole() == Role.ADMIN || us.getCurrentUser().getRole() == Role.WRITER) {
             return ResponseEntity.ok(ts.getAll());
         }
         return ResponseEntity.status(403).build();
