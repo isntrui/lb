@@ -15,7 +15,7 @@ public class SEmailService {
     public void sendSimpleEmail(String toAddress, String subject, String message) {
         SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
         simpleMailMessage.setTo(toAddress);
-        simpleMailMessage.setFrom("LB Tool");
+        simpleMailMessage.setFrom("lb@isntrui.ru");
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(message);
         emailSender.send(simpleMailMessage);
