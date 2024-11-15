@@ -44,7 +44,7 @@ public class DesignController {
     @Operation(summary = "Delete design")
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> delete(@PathVariable @Parameter(description = "Design to remove") Long id) {
-        if (isPermitted()) return ResponseEntity.status(403).build();
+        if (!isPermitted()) return ResponseEntity.status(403).build();
         designService.deleteDesign(id);
         return ResponseEntity.ok().build();
     }
@@ -70,14 +70,14 @@ public class DesignController {
     @Operation(summary = "Search")
     @GetMapping("/search")
     public ResponseEntity<List<Design>> search(@RequestParam @Parameter(description = "Search query") String query) {
-        if (isPermitted()) return ResponseEntity.status(403).build();
+        if (!isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.search(query));
     }
 
     @Operation(summary = "Get design by id")
     @GetMapping("/{id}")
     public ResponseEntity<Design> getDesign(@PathVariable @Parameter(description = "DesignID to get") Long id) {
-        if (isPermitted()) return ResponseEntity.status(403).build();
+        if (!isPermitted()) return ResponseEntity.status(403).build();
         Design design = designService.getDesignById(id);
         if (design == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(design);
@@ -101,7 +101,7 @@ public class DesignController {
     @Operation(summary = "Get my designs")
     @GetMapping("/my")
     public ResponseEntity<List<Design>> getMy() {
-        if (isPermitted()) return ResponseEntity.status(403).build();
+        if (!isPermitted()) return ResponseEntity.status(403).build();
         return ResponseEntity.ok(designService.getDesignsByUser(userService.getCurrentUser()));
     }
 
