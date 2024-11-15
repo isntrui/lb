@@ -58,7 +58,11 @@ public class TaskController {
             }
         }
         taskService.create(task);
-        emailService.sendSimpleEmail(Objects.requireNonNull(task.getTakenBy()).getEmail(), "Появилась новая задача", task.getCreatedBy().getRole().toString() + " " + task.getCreatedBy().getFirstName() + " " + task.getCreatedBy().getLastName() + " назначил тебе новую задачу: " + task.getTitle() + ".\nПодробности в приложении. Не тяни с выполнением, пожалуйста :)");
+        try {
+            emailService.sendSimpleEmail(userService.getUserById(task.getTakenBy().getId()).getEmail(), "Появилась новая задача", task.getCreatedBy().getRole().toString() + " " + task.getCreatedBy().getFirstName() + " " + task.getCreatedBy().getLastName() + " назначил тебе новую задачу: " + task.getTitle() + ".\nПодробности в приложении. Не тяни с выполнением, пожалуйста :)");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return ResponseEntity.ok(task);
     }
 
