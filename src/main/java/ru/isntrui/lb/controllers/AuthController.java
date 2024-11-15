@@ -14,6 +14,7 @@ import ru.isntrui.lb.queries.SignInRequest;
 import ru.isntrui.lb.queries.SignUpRequest;
 import ru.isntrui.lb.services.AuthenticationService;
 import ru.isntrui.lb.services.InviteService;
+import ru.isntrui.lb.services.SEmailService;
 import ru.isntrui.lb.services.UserService;
 
 @RestController
@@ -24,12 +25,18 @@ public class AuthController {
     private final AuthenticationService authenticationService;
     private final UserService userService;
     private final InviteService inviteService;
-
+    private final SEmailService emailService;
     @Operation(summary = "Register user")
     @PostMapping("sign-up")
     public ResponseEntity<JwtAuthenticationResponse> signUp(@RequestBody @Valid @Parameter(description = "Formatted request with credentials") SignUpRequest request) {
         try {
-            return ResponseEntity.ok().body(authenticationService.signUp(request));
+            JwtAuthenticationResponse r = authenticationService.signUp(request);
+            /*emailService.sendSimpleEmail(
+                    request.getEmail(),
+                    "Регистрация на LB Tool",
+                    request.getFirstName() + ", добро пожаловать на платформу LB Tool! С этой почты будут приходить уведомления о новых задачах! \nТвой логин: " + request.getUsername()
+            );*/
+            return ResponseEntity.ok().body(r);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }

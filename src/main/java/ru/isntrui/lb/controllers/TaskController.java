@@ -12,6 +12,7 @@ import ru.isntrui.lb.enums.Role;
 import ru.isntrui.lb.enums.TaskStatus;
 import ru.isntrui.lb.models.Task;
 import ru.isntrui.lb.models.User;
+import ru.isntrui.lb.services.SEmailService;
 import ru.isntrui.lb.services.TaskService;
 import ru.isntrui.lb.services.UserService;
 
@@ -24,11 +25,12 @@ import java.util.Optional;
 public class TaskController {
     private final TaskService taskService;
     private final UserService userService;
-
+    private final SEmailService emailService;
     @Autowired
-    public TaskController(TaskService taskService, UserService userService) {
+    public TaskController(TaskService taskService, UserService userService, SEmailService emailService) {
         this.taskService = taskService;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @Operation(summary = "Create new task")
@@ -56,6 +58,7 @@ public class TaskController {
             }
         }
         taskService.create(task);
+        emailService.sendSimpleEmail(Objects.requireNonNull(task.getTakenBy()).getEmail(), "Появилась новая задача", task.getCreatedBy().getRole().toString() + " " + task.getCreatedBy().getFirstName() + " " + task.getCreatedBy().getLastName() + " назначил тебе новую задачу: " + task.getTitle() + ".\nПодробности в приложении. Не тяни с выполнением, пожалуйста :)");
         return ResponseEntity.ok(task);
     }
 
