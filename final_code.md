@@ -1,1 +1,1 @@
-# Скринкаст: **https://disk.yandex.ru/i/rTBvWym5bkGLXwz**
+# Скринкаст: [**тык**](https://disk.yandex.ru/i/rTBvWym5bkGLXw)
