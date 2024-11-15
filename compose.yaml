@@ -102,6 +102,9 @@ services:
       SIGNING_KEY: ${SIGNING_KEY}
       AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
       AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      MAIL_PASSWORD: ${MAIL_PASSWORD}
+      MAIL: ${MAIL}
+
     ports:
       - '80:80'
     deploy:
